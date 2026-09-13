@@ -1,0 +1,43 @@
+name: autonomous-agent
+
+# Free 24x7 scheduler. GitHub Actions runs this on a cron for $0.
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # every 6 hours
+  workflow_dispatch: {}       # manual "wake up" button
+
+permissions:
+  contents: write            # lets the agent commit new posts + ledger
+
+concurrency:
+  group: agent
+  cancel-in-progress: false
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - name: Run the agent
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
+          COST_PER_RUN: ${{ vars.COST_PER_RUN || '0.0' }}
+          SURVIVAL_THRESHOLD: ${{ vars.SURVIVAL_THRESHOLD || '-5.0' }}
+          AFFILIATE_TAG: ${{ vars.AFFILIATE_TAG }}
+        run: python -m agent.main
+
+      - name: Commit results
+        run: |
+          git config user.name "autonomous-agent"
+          git config user.email "agent@users.noreply.github.com"
+          git add docs state
+          git commit -m "agent: new content + ledger update" || echo "nothing to commit"
+          git push
