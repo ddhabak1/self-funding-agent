@@ -5,3 +5,23 @@ media/
 
 # runtime message-bus DB (regenerated each run)
 state/agentbus.db
+
+# Ruflo local secrets and runtime data
+.env.local
+.env.*.local
+.claude-flow/data/
+.claude-flow/logs/
+.claude-flow/sessions/
+
+# ruflo (Claude Code coordination harness) — operator-machine tooling, not part of the public site
+.claude/
+.claude-flow/
+.agents/
+.mcp.json
+
+# OpenMontage render-brief handoff queue (ephemeral)
+state/video_briefs/
+CLAUDE.md
+.swarm/
+ruvector.db
+*.db

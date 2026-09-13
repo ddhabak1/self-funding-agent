@@ -48,6 +48,7 @@ agent/
   content.py   writes the on-site article
   factory.py   product -> landing post + styled HD promo video + affiliate links
   shorts.py    HD 1080x1920 per-frame video renderer + free TTS voiceover
+  videobrief.py optional render brief handed to the OpenMontage studio
   affiliate.py Amazon Associates tagged-link injection (compliant)
   optimize.py  self-tuning bandit over hook styles + category bias
   night.py     the all-night loop: scout/swarm -> videos -> self-tune
@@ -71,6 +72,24 @@ that earn clicks get produced more; the rest fade. Rewards come from real
 metrics when available (`state/metrics.json`: views/clicks/earnings), so it
 starts learning immediately and improves as real numbers arrive. Strategy is
 committed back to the repo, so learning persists across nights and machines.
+
+### Two-tier video: always-on $0 vs. premium studio
+Unattended CI must never end without a deliverable, so the built-in `shorts.py`
+PIL renderer (zero external deps) is the **guaranteed $0 path** and default
+(`VIDEO_BACKEND=builtin`).
+
+Set `VIDEO_BACKEND=openmontage` to *also* emit a structured render brief
+(`state/video_briefs/<slug>.json`) for **[OpenMontage](https://github.com/calesthio/OpenMontage)**
+— an instruction-driven studio (Remotion + offline **Piper TTS** + open
+Archive.org/NASA/Wikimedia footage, **zero API keys**). OpenMontage is agentic
+(an AI assistant drives its pipeline through quality gates), so it runs on your
+**24×7 machine** — where **[ruflo](https://github.com/ruvnet/ruflo)** + Claude
+Code (pointed at OmniRoute's free providers) pick up briefs and produce
+cinematic cuts that replace the built-in short. The built-in video is always
+produced first, so a run never ships nothing. Earnings can later fund
+OpenMontage's optional paid providers (Veo/Kling ~$1-4/video) with no code
+change. ruflo/OpenMontage are operator tooling and are git-ignored from this
+public site repo.
 
 ## Run it
 

@@ -59,6 +59,21 @@ SURVIVAL_THRESHOLD = float(os.environ.get("SURVIVAL_THRESHOLD", "-5.0"))
 AFFILIATE_TAG = os.environ.get("AFFILIATE_TAG", "")
 AMAZON_DOMAIN = os.environ.get("AMAZON_DOMAIN", "www.amazon.in")
 
+# --- Video backend ---------------------------------------------------------
+# "builtin"     -> always-on $0 PIL renderer (agent/shorts.py). Works headless
+#                  in CI with zero external deps. This is the guaranteed path.
+# "openmontage" -> ALSO emit a rich render brief for the OpenMontage studio
+#                  (Remotion + Piper TTS + open footage) to be produced on the
+#                  operator's 24x7 machine, where an AI assistant drives its
+#                  agentic pipeline. The builtin video is still produced so an
+#                  unattended run never ends without a deliverable.
+VIDEO_BACKEND = os.environ.get("VIDEO_BACKEND", "builtin").lower()
+# Where the OpenMontage checkout lives (default: sibling of this repo).
+OPENMONTAGE_DIR = os.environ.get(
+    "OPENMONTAGE_DIR", str(ROOT.parent / "OpenMontage"))
+# Render briefs the money agent hands off to OpenMontage are written here.
+VIDEO_BRIEF_DIR = ROOT / "state" / "video_briefs"
+
 # Public site location (used for canonical URLs, sitemap, RSS).
 SITE_URL = os.environ.get("SITE_URL", "https://ddhabak1.github.io")
 SITE_BASEURL = os.environ.get("SITE_BASEURL", "/self-funding-agent")

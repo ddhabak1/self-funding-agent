@@ -92,6 +92,20 @@ def make_asset(brain, product, style=None):
             result["video"] = str(mp4.relative_to(config.ROOT))
             bus.post(NAME, "video_ready",
                      {"product": prod, "style": style, "file": mp4.name})
+            # Optionally hand a richer render brief to the OpenMontage studio.
+            try:
+                from .videobrief import emit_brief
+                brief = emit_brief(
+                    slug=path.stem, title=title, product=prod,
+                    category=category, style=style, style_directive=directive,
+                    script=script, landing_url=f"/{path.stem}.html",
+                    search_url=search_link(search_q))
+                if brief:
+                    result["video_brief"] = str(brief.relative_to(config.ROOT))
+                    bus.post(NAME, "video_brief_queued",
+                             {"product": prod, "brief": brief.name})
+            except Exception as e:
+                bus.post(NAME, "video_brief_skipped", {"err": str(e)[:120]})
         except Exception as e:
             bus.post(NAME, "video_skipped",
                      {"product": prod, "err": str(e)[:120]})
