@@ -1,57 +1,57 @@
 {
-  "ts": "2026-09-13T19:03:36.423636+00:00",
-  "generation": 6,
-  "assets_seen": 12,
+  "ts": "2026-09-13T21:17:04.748817+00:00",
+  "generation": 9,
+  "assets_seen": 18,
   "best_styles": [
     [
       "shock_stat",
-      1.838,
-      11
+      1.78,
+      30
     ],
     [
       "secret_reveal",
-      1.788,
-      29
+      1.767,
+      58
     ],
     [
       "question_hook",
       1.74,
-      6
+      9
     ]
   ],
   "weak_styles": [],
   "best_categories": [
     [
       "beauty",
-      1.847,
-      32
+      1.846,
+      58
     ],
     [
       "grooming",
       1.74,
-      7
+      16
     ],
     [
       "kitchen",
-      1.612,
-      5
+      1.6,
+      16
     ]
   ],
   "weak_categories": [
     [
       "grooming",
       1.74,
-      7
+      16
     ],
     [
       "kitchen",
-      1.612,
-      5
+      1.6,
+      16
     ],
     [
       "decor",
       1.58,
-      2
+      7
     ]
   ],
   "video": {
@@ -59,8 +59,8 @@
     "avg_opportunity": 76.5
   },
   "post_only": {
-    "count": 10,
-    "avg_opportunity": 72.3
+    "count": 16,
+    "avg_opportunity": 71.25
   },
   "guidance": "lean into beauty, grooming, kitchen; favor hooks that Open with a surprising number or statistic."
 }

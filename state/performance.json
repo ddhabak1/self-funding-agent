@@ -130,5 +130,71 @@
     "video": null,
     "created": "2026-09-13T19:03:36.156727+00:00",
     "logged": "2026-09-13T19:03:36.411649+00:00"
+  },
+  {
+    "id": "893a2371f218",
+    "product": "Vitamin C face serum",
+    "category": "beauty",
+    "style": "shock_stat",
+    "opportunity": 81.0,
+    "post": "2026-09-13-vitamin-c-face-serum-shockstat.md",
+    "video": null,
+    "created": "2026-09-13T21:17:01.237433+00:00",
+    "logged": "2026-09-13T21:17:01.820878+00:00"
+  },
+  {
+    "id": "96b043a70416",
+    "product": "Beard trimmer kit",
+    "category": "grooming",
+    "style": "shock_stat",
+    "opportunity": 72.0,
+    "post": "2026-09-13-beard-trimmer-kit-shockstat.md",
+    "video": null,
+    "created": "2026-09-13T21:17:01.825130+00:00",
+    "logged": "2026-09-13T21:17:02.172013+00:00"
+  },
+  {
+    "id": "b56d6fac2404",
+    "product": "Air fryer 4L",
+    "category": "kitchen",
+    "style": "shock_stat",
+    "opportunity": 72.0,
+    "post": "2026-09-13-air-fryer-4l-shockstat.md",
+    "video": null,
+    "created": "2026-09-13T21:17:02.176282+00:00",
+    "logged": "2026-09-13T21:17:03.295968+00:00"
+  },
+  {
+    "id": "a796b8e70ca9",
+    "product": "Ceramic hair straightener",
+    "category": "beauty",
+    "style": "secret_reveal",
+    "opportunity": 72.0,
+    "post": "2026-09-13-ceramic-hair-straightener-secretreveal.md",
+    "video": null,
+    "created": "2026-09-13T21:17:03.303779+00:00",
+    "logged": "2026-09-13T21:17:03.851528+00:00"
+  },
+  {
+    "id": "2ae37f9d5ca4",
+    "product": "LED strip lights",
+    "category": "decor",
+    "style": "shock_stat",
+    "opportunity": 64.0,
+    "post": "2026-09-13-led-strip-lights-shockstat.md",
+    "video": null,
+    "created": "2026-09-13T21:17:03.855742+00:00",
+    "logged": "2026-09-13T21:17:04.260799+00:00"
+  },
+  {
+    "id": "f6081105cfe6",
+    "product": "Non-stick cookware set",
+    "category": "kitchen",
+    "style": "shock_stat",
+    "opportunity": 56.0,
+    "post": "2026-09-13-nonstick-cookware-set-shockstat.md",
+    "video": null,
+    "created": "2026-09-13T21:17:04.265120+00:00",
+    "logged": "2026-09-13T21:17:04.735817+00:00"
   }
 ]

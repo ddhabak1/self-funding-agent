@@ -1,8 +1,8 @@
 {
   "styles": {
     "shock_stat": {
-      "count": 11,
-      "reward": 20.22
+      "count": 30,
+      "reward": 53.40000000000001
     },
     "mistake_warning": {
       "count": 0,
@@ -21,12 +21,12 @@
       "reward": 0.0
     },
     "question_hook": {
-      "count": 6,
-      "reward": 10.44
+      "count": 9,
+      "reward": 15.66
     },
     "secret_reveal": {
-      "count": 29,
-      "reward": 51.84000000000001
+      "count": 58,
+      "reward": 102.47999999999998
     },
     "price_shock": {
       "count": 0,
@@ -35,22 +35,22 @@
   },
   "categories": {
     "beauty": {
-      "count": 32,
-      "reward": 59.10000000000003
+      "count": 58,
+      "reward": 107.04
     },
     "grooming": {
-      "count": 7,
-      "reward": 12.18
+      "count": 16,
+      "reward": 27.83999999999999
     },
     "kitchen": {
-      "count": 5,
-      "reward": 8.06
+      "count": 16,
+      "reward": 25.6
     },
     "decor": {
-      "count": 2,
-      "reward": 3.16
+      "count": 7,
+      "reward": 11.06
     }
   },
-  "updated": "2026-09-13T19:03:36.421334+00:00",
-  "generation": 6
+  "updated": "2026-09-13T21:17:04.746405+00:00",
+  "generation": 9
 }
