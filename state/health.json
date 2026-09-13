@@ -1,20 +1,20 @@
 {
-  "ts": "2026-09-13T18:24:32.028867+00:00",
+  "ts": "2026-09-13T18:35:27.384051+00:00",
   "healthy": true,
   "checks": {
     "llm": {
-      "omniroute": true,
-      "gemini_configured": false,
+      "omniroute": false,
+      "gemini_configured": true,
       "online": true,
       "ok": true
     },
     "renderer": {
       "ok": true,
-      "note": "ok",
+      "note": "ffmpeg missing (silent video only)",
       "circuit_open": false
     },
     "disk": {
-      "free_gb": 240.13,
+      "free_gb": 83.21,
       "ok": true
     },
     "site": {
