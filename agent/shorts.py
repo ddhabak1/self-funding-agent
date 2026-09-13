@@ -1,28 +1,40 @@
-"""Turn a published article into a vertical YouTube Short (video + metadata).
+"""Turn an article into a top-notch, HD vertical YouTube Short.
 
-Pipeline: article -> Gemini script -> edge-tts voiceover (per line) ->
-Pillow text cards -> ffmpeg segments -> concatenated 1080x1920 MP4.
+v2 renderer: every frame is drawn with PIL (numpy backgrounds), so we get
+full control over HD graphics and modern word-by-word animated captions
+without relying on ffmpeg text filters or any external assets.
 
-Produces: media/<slug>/short.mp4 and media/<slug>/meta.txt
-Free stack, no external API keys required.
+Design follows 2026 viral-Shorts best practices:
+  - strong 1-3s hook, 15-40s length
+  - big bold high-contrast captions, 2-3 words at a time, active word
+    highlighted (watched-on-mute friendly)
+  - constant motion: animated gradient + drifting glow, pop-in captions
+  - top progress bar, loop-friendly ending
+
+Output: media/<slug>/short.mp4 + meta.txt
 """
 import asyncio
 import json
+import math
 import re
 import subprocess
 import tempfile
 from pathlib import Path
 
+import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 from . import config
 from .brain import Brain
 
 W, H = 1080, 1920
-BG_TOP = (11, 16, 32)
-BG_BOTTOM = (24, 32, 64)
-ACCENT = (94, 234, 212)
-WHITE = (245, 245, 245)
+FPS = 24
+VOICE = "en-US-GuyNeural"
+GROUP_SIZE = 3
+
+ACCENT = (94, 234, 212)      # teal highlight
+WHITE = (248, 249, 252)
+HANDLE = "@smarttechpickshq"
 
 MEDIA_DIR = config.ROOT / "media"
 
@@ -30,6 +42,7 @@ _FONT_CANDIDATES = [
     "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
     "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
     "/Library/Fonts/Arial Bold.ttf",
+    "/System/Library/Fonts/Supplemental/Arial.ttf",
 ]
 
 
@@ -52,33 +65,36 @@ def read_post(path):
     return title, " ".join(plain.split())[:1800]
 
 
-# --- scripting -------------------------------------------------------------
+# --- scripting (Research/Content agent output) -----------------------------
 def make_script(brain, title, body):
     site = f"{config.SITE_URL}{config.SITE_BASEURL}/"
-    prompt = f"""Turn this article into a punchy ~35-second vertical SHORT.
+    prompt = f"""You are a viral short-form video scriptwriter. Turn this article
+into a punchy 25-38 second vertical SHORT that maximizes retention.
 Title: "{title}"
 Content: {body}
 
+Rules: first line must be a 4-8 word scroll-stopping HOOK (curiosity/FOMO).
+Spoken lines: short, punchy, <= 11 words, conversational, no filler.
 Return strict JSON:
 {{
- "hook": "a 5-8 word scroll-stopping opening line",
- "lines": ["6 to 7 short spoken caption lines, each <= 12 words, punchy"],
- "cta": "one line telling viewers to check the link in bio/description",
- "yt_title": "<= 90 char YouTube title with a hook, no hashtags",
- "yt_description": "2-3 lines. Mention full guide link {site} and that links may be affiliate.",
- "hashtags": ["6-10 relevant hashtags without the # symbol"]
+ "hook": "4-8 word hook",
+ "lines": ["6-8 spoken lines"],
+ "cta": "one line: check the link in the description",
+ "yt_title": "<=90 char title with a hook",
+ "yt_description": "2-3 lines; include full guide link {site}; note some links may be affiliate",
+ "hashtags": ["8-10 hashtags without # symbol"]
 }}"""
     data = brain.think(prompt, as_json=True)
     if not isinstance(data, dict) or "lines" not in data:
-        # offline / parse fallback
         data = {
-            "hook": title,
-            "lines": [title, "Here's what you need to know.",
-                      "Check the full guide for details."],
-            "cta": "Full guide + picks in the description.",
+            "hook": title[:60],
+            "lines": ["Here's what you actually need to know.",
+                      "It's faster, smarter, and worth the upgrade.",
+                      "But there's a catch most people miss."],
+            "cta": "Full guide and top picks in the description.",
             "yt_title": title[:90],
             "yt_description": f"Full guide: {site}\nSome links may be affiliate.",
-            "hashtags": ["tech", "gadgets", "shorts"],
+            "hashtags": ["tech", "gadgets", "shorts", "techtok"],
         }
     return data
 
@@ -86,8 +102,7 @@ Return strict JSON:
 # --- voice -----------------------------------------------------------------
 async def _tts(text, out):
     import edge_tts
-    voice = "en-US-AriaNeural"
-    await edge_tts.Communicate(text, voice).save(str(out))
+    await edge_tts.Communicate(text, VOICE, rate="+8%").save(str(out))
 
 
 def synth(text, out):
@@ -98,126 +113,223 @@ def synth(text, out):
 def _duration(path):
     r = subprocess.run(
         ["ffprobe", "-v", "quiet", "-show_entries", "format=duration",
-         "-of", "csv=p=0", str(path)],
-        capture_output=True, text=True)
+         "-of", "csv=p=0", str(path)], capture_output=True, text=True)
     try:
         return float(r.stdout.strip())
     except ValueError:
-        return 2.0
+        return 1.5
 
 
-# --- rendering -------------------------------------------------------------
-def _bg():
-    img = Image.new("RGB", (W, H), BG_TOP)
-    top, bot = BG_TOP, BG_BOTTOM
-    for y in range(H):
-        t = y / H
-        img.paste(tuple(int(top[i] + (bot[i] - top[i]) * t) for i in range(3)),
-                  (0, y, W, y + 1))
-    return img
+# --- timeline --------------------------------------------------------------
+def _build_timeline(script, tmp):
+    """Create caption groups, synth audio per group, return groups + durations."""
+    units = []
+    units.append({"text": script["hook"], "emph": True})
+    for ln in script["lines"]:
+        units.append({"text": ln, "emph": False})
+    units.append({"text": script.get("cta", "Link in the description!"),
+                  "emph": True})
+
+    groups, audio_files, t = [], [], 0.0
+    gi = 0
+    for u in units:
+        words = u["text"].split()
+        # split a line into small caption groups of GROUP_SIZE words
+        for i in range(0, len(words), GROUP_SIZE):
+            chunk = words[i:i + GROUP_SIZE]
+            mp3 = tmp / f"g{gi}.mp3"
+            dur = synth(" ".join(chunk), mp3) + 0.06
+            groups.append({"words": chunk, "start": t, "dur": dur,
+                           "emph": u["emph"]})
+            audio_files.append(mp3)
+            t += dur
+            gi += 1
+    return groups, audio_files, t
 
 
-def _wrap(draw, text, font, max_w):
-    words, lines, cur = text.split(), [], ""
-    for w in words:
-        test = (cur + " " + w).strip()
-        if draw.textlength(test, font=font) <= max_w:
-            cur = test
-        else:
-            if cur:
-                lines.append(cur)
-            cur = w
+# --- background (numpy, animated) ------------------------------------------
+_BG_W, _BG_H = W // 2, H // 2  # render bg at half-res then upscale (fast+smooth)
+_yy, _xx = np.mgrid[0:_BG_H, 0:_BG_W].astype(np.float32)
+
+
+def _bg_frame(t, total):
+    # vertical gradient between two slowly shifting deep colors
+    phase = t / max(total, 1)
+    top = np.array([14, 18, 38]) + np.array([10, 4, 22]) * math.sin(phase * 3.14)
+    bot = np.array([30, 22, 66]) + np.array([8, 10, 18]) * math.cos(phase * 2.0)
+    v = (_yy / _BG_H)[..., None]
+    img = top[None, None, :] * (1 - v) + bot[None, None, :] * v
+
+    # drifting radial accent glow -> constant motion
+    cx = _BG_W * (0.5 + 0.32 * math.sin(t * 0.6))
+    cy = _BG_H * (0.4 + 0.28 * math.cos(t * 0.45))
+    d2 = (_xx - cx) ** 2 + (_yy - cy) ** 2
+    glow = np.exp(-d2 / (2 * (_BG_W * 0.55) ** 2)).astype(np.float32)
+    acc = np.array(ACCENT, dtype=np.float32)
+    img += glow[..., None] * acc[None, None, :] * 0.28
+
+    img = np.clip(img, 0, 255).astype(np.uint8)
+    im = Image.fromarray(img, "RGB").resize((W, H), Image.BILINEAR)
+    return im
+
+
+def _vignette_mask():
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    d2 = ((xx - W / 2) / (W / 2)) ** 2 + ((yy - H / 2) / (H / 2)) ** 2
+    m = np.clip(1.0 - 0.45 * d2, 0.35, 1.0)
+    return m[..., None]
+
+
+_VIGNETTE = _vignette_mask()
+
+
+def _apply_vignette(im):
+    arr = np.asarray(im).astype(np.float32) * _VIGNETTE
+    return Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8), "RGB")
+
+
+# --- caption rendering -----------------------------------------------------
+def _draw_caption(im, words, active_idx, scale, emph):
+    draw = ImageDraw.Draw(im)
+    base = 118 if emph else 96
+    size = max(40, int(base * scale))
+    font = _font(size)
+    gap = int(size * 0.28)
+
+    widths = [draw.textlength(w, font=font) for w in words]
+    total_w = sum(widths) + gap * (len(words) - 1)
+    # wrap to max 2 lines if too wide
+    max_w = W - 150
+    lines, cur, cur_w = [], [], 0.0
+    for w, ww in zip(words, widths):
+        add = ww + (gap if cur else 0)
+        if cur_w + add > max_w and cur:
+            lines.append((cur, cur_w))
+            cur, cur_w = [], 0.0
+            add = ww
+        cur.append((w, ww))
+        cur_w += add
     if cur:
-        lines.append(cur)
-    return lines
+        lines.append((cur, cur_w))
 
-
-def card(text, out, kicker="SMART TECH PICKS", accent=False):
-    img = _bg()
-    d = ImageDraw.Draw(img)
-    f_big = _font(76)
-    f_kick = _font(38)
-
-    d.text((70, 120), kicker, font=f_kick, fill=ACCENT)
-    d.rectangle([70, 180, 320, 188], fill=ACCENT)
-
-    lines = _wrap(d, text, f_big, W - 160)
-    line_h = 96
-    total = len(lines) * line_h
-    y = (H - total) // 2
-    for ln in lines:
-        w = d.textlength(ln, font=f_big)
-        color = ACCENT if accent else WHITE
-        d.text(((W - w) // 2, y), ln, font=f_big, fill=color)
+    line_h = size + int(size * 0.2)
+    total_h = line_h * len(lines)
+    y = int(H * 0.46) - total_h // 2
+    idx = 0
+    asc = font.getbbox("Ag")[3]
+    for ln, lw in lines:
+        x = (W - lw) // 2
+        for w, ww in ln:
+            color = ACCENT if idx == active_idx else WHITE
+            draw.text((x, y), w, font=font, fill=color,
+                      stroke_width=max(3, size // 18), stroke_fill=(0, 0, 0))
+            x += ww + gap
+            idx += 1
         y += line_h
 
-    d.text((70, H - 130), "youtube.com/@smarttechpickshq",
-           font=_font(30), fill=(150, 160, 180))
-    img.save(out)
+
+def _draw_chrome(im, progress):
+    draw = ImageDraw.Draw(im)
+    # top progress bar
+    draw.rectangle([0, 0, W, 12], fill=(0, 0, 0))
+    draw.rectangle([0, 0, int(W * progress), 12], fill=ACCENT)
+    # brand kicker
+    kf = _font(40)
+    draw.text((60, 70), "SMART TECH PICKS", font=kf, fill=ACCENT,
+              stroke_width=3, stroke_fill=(0, 0, 0))
+    # handle bottom
+    hf = _font(38)
+    tw = draw.textlength(HANDLE, font=hf)
+    draw.text(((W - tw) // 2, H - 150), HANDLE, font=hf, fill=(210, 220, 235),
+              stroke_width=3, stroke_fill=(0, 0, 0))
 
 
-def _segment(png, mp3, out, dur):
-    subprocess.run(
-        ["ffmpeg", "-y", "-loop", "1", "-i", str(png), "-i", str(mp3),
-         "-c:v", "libx264", "-tune", "stillimage", "-c:a", "aac",
-         "-b:a", "192k", "-pix_fmt", "yuv420p", "-t", f"{dur:.2f}",
-         "-vf", f"scale={W}:{H}", str(out)],
-        check=True, capture_output=True)
+def _render_frames(groups, total, frames_dir):
+    n = int(math.ceil(total * FPS))
+    gi = 0
+    for f in range(n):
+        t = f / FPS
+        while gi + 1 < len(groups) and t >= groups[gi + 1]["start"]:
+            gi += 1
+        g = groups[gi]
+        local = t - g["start"]
+        # word highlight timing (even split across group duration)
+        wi = min(len(g["words"]) - 1, int(local / g["dur"] * len(g["words"])))
+        # pop-in scale for first 0.13s of a group
+        pop = min(1.0, local / 0.13)
+        scale = 0.86 + 0.14 * (1 - (1 - pop) ** 2)
+
+        im = _bg_frame(t, total)
+        im = _apply_vignette(im)
+        _draw_caption(im, g["words"], wi, scale, g["emph"])
+        _draw_chrome(im, min(1.0, t / total))
+        im.save(frames_dir / f"f{f:05d}.png")
+    return n
+
+
+# --- assembly --------------------------------------------------------------
+def build_from_script(script, slug):
+    outdir = MEDIA_DIR / slug
+    outdir.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        groups, audio_files, total = _build_timeline(script, tmp)
+
+        # concat narration audio
+        listf = tmp / "a.txt"
+        listf.write_text("".join(f"file '{p}'\n" for p in audio_files))
+        narration = tmp / "narration.mp3"
+        subprocess.run(["ffmpeg", "-y", "-f", "concat", "-safe", "0",
+                        "-i", str(listf), "-c", "copy", str(narration)],
+                       check=True, capture_output=True)
+
+        frames_dir = tmp / "frames"
+        frames_dir.mkdir()
+        _render_frames(groups, total, frames_dir)
+
+        out = outdir / "short.mp4"
+        subprocess.run(
+            ["ffmpeg", "-y", "-framerate", str(FPS),
+             "-i", str(frames_dir / "f%05d.png"), "-i", str(narration),
+             "-c:v", "libx264", "-crf", "18", "-preset", "veryfast",
+             "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k",
+             "-shortest", "-movflags", "+faststart", str(out)],
+            check=True, capture_output=True)
+    _write_meta(outdir, script)
+    return out
 
 
 def build_short(post_path):
     title, body = read_post(post_path)
-    brain = Brain()
-    script = make_script(brain, title, body)
-
-    slug = Path(post_path).stem
-    outdir = MEDIA_DIR / slug
-    outdir.mkdir(parents=True, exist_ok=True)
-
-    segments = []
-    blocks = [(script["hook"], True)] + [(l, False) for l in script["lines"]]
-    blocks.append((script.get("cta", "Link in the description!"), True))
-
-    with tempfile.TemporaryDirectory() as tmp:
-        tmp = Path(tmp)
-        for i, (text, accent) in enumerate(blocks):
-            if not text.strip():
-                continue
-            mp3 = tmp / f"a{i}.mp3"
-            png = tmp / f"c{i}.png"
-            dur = synth(text, mp3) + 0.35
-            card(text, png, accent=accent)
-            seg = tmp / f"s{i}.mp4"
-            _segment(png, mp3, seg, dur)
-            segments.append(seg)
-
-        listfile = tmp / "list.txt"
-        listfile.write_text("".join(f"file '{s}'\n" for s in segments))
-        out_mp4 = outdir / "short.mp4"
-        subprocess.run(
-            ["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(listfile),
-             "-c", "copy", str(out_mp4)],
-            check=True, capture_output=True)
-
-    _write_meta(outdir, script)
-    return outdir / "short.mp4"
+    script = make_script(Brain(), title, body)
+    return build_from_script(script, Path(post_path).stem)
 
 
 def _write_meta(outdir, script):
-    tags = " ".join(
-        "#" + re.sub(r"[^0-9A-Za-z]", "", h) for h in script.get("hashtags", [])
-        if re.sub(r"[^0-9A-Za-z]", "", h)
-    )
-    meta = (
-        f"TITLE:\n{script.get('yt_title', '')}\n\n"
-        f"DESCRIPTION:\n{script.get('yt_description', '')}\n\n{tags}\n"
-    )
+    tags = " ".join("#" + re.sub(r"[^0-9A-Za-z]", "", h)
+                    for h in script.get("hashtags", [])
+                    if re.sub(r"[^0-9A-Za-z]", "", h))
+    meta = (f"TITLE:\n{script.get('yt_title', '')}\n\n"
+            f"DESCRIPTION:\n{script.get('yt_description', '')}\n\n{tags}\n")
     (outdir / "meta.txt").write_text(meta)
 
 
 if __name__ == "__main__":
     import sys
-    posts = sorted(config.POSTS_DIR.glob("*.md"), reverse=True)
-    target = sys.argv[1] if len(sys.argv) > 1 else str(posts[0])
-    print("Building short for:", target)
-    print("Done ->", build_short(target))
+    if "--mock" in sys.argv:
+        demo = {
+            "hook": "Stop overpaying for slow WiFi",
+            "lines": ["Wi-Fi 7 is a massive speed jump.",
+                      "It uses multi-link operation for zero lag.",
+                      "Perfect for 8K streaming and gaming.",
+                      "But you need the right router."],
+            "cta": "Full guide and top picks in the description.",
+            "yt_title": "Stop Overpaying For Slow WiFi",
+            "yt_description": "Full guide: link below.",
+            "hashtags": ["WiFi7", "TechTok", "Shorts", "Gadgets"],
+        }
+        print("Built ->", build_from_script(demo, "demo-mock"))
+    else:
+        posts = sorted(config.POSTS_DIR.glob("*.md"), reverse=True)
+        target = sys.argv[1] if len(sys.argv) > 1 else str(posts[0])
+        print("Built ->", build_short(target))
