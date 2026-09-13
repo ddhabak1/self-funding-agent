@@ -13,7 +13,7 @@ MEMORY_PATH = STATE_DIR / "memory.json"
 # --- Brain -----------------------------------------------------------------
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 # Free-tier friendly model. Override with env if you like.
-GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.6-flash")
 
 # --- Economics (all USD) ---------------------------------------------------
 # What the agent believes it costs to stay alive each run/month.

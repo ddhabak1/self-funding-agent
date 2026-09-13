@@ -28,7 +28,7 @@ jobs:
       - name: Run the agent
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-3.6-flash' }}
           COST_PER_RUN: ${{ vars.COST_PER_RUN || '0.0' }}
           SURVIVAL_THRESHOLD: ${{ vars.SURVIVAL_THRESHOLD || '-5.0' }}
           AFFILIATE_TAG: ${{ vars.AFFILIATE_TAG }}
