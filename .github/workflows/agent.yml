@@ -51,6 +51,14 @@ jobs:
             done
           fi
 
+      - name: Self-heal preflight (doctor)
+        continue-on-error: true
+        env:
+          OMNIROUTE_URL: http://localhost:20128/v1
+          OMNIROUTE_MODEL: ${{ vars.OMNIROUTE_MODEL || 'auto' }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: MODE=doctor python -m agent.main
+
       - name: Run the agent
         timeout-minutes: 45
         env:

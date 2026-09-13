@@ -7,6 +7,9 @@ import os
 
 if __name__ == "__main__":
     mode = os.environ.get("MODE", "cycle").lower()
+    if mode == "doctor":
+        from .selfheal import doctor
+        raise SystemExit(doctor())
     if mode == "night":
         from .night import run_night
         raise SystemExit(run_night())

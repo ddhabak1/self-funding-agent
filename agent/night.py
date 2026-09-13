@@ -16,7 +16,7 @@ import os
 import time
 from datetime import datetime, timezone
 
-from . import bus, config, ledger, optimize, scout
+from . import bus, config, ledger, optimize, reflect, scout, selfheal
 from .brain import Brain
 from .factory import make_asset
 
@@ -45,15 +45,26 @@ def run_night():
 
     brain = Brain()
     print(f"Brain backend: {_backend_label(brain)}")
+
+    # Self-heal: take vitals and route around any broken parts BEFORE working.
+    health = selfheal.preflight(brain)
+    print(f"[selfheal] healthy={health['healthy']} "
+          f"actions={health.get('actions') or 'none'}")
+
     if not make_video:
         # let the factory skip the heavy renderer
         os.environ["FACTORY_NO_VIDEO"] = "1"
 
     # 1) scout tonight's money list — via the research swarm if enabled
     swarm_n = int(os.environ.get("SWARM_WORKERS", str(config.SWARM_WORKERS)))
-    if swarm_n > 0:
+    if swarm_n > 0 and not selfheal.circuit_open("swarm"):
         from . import swarm
-        products = swarm.research_swarm(brain, n_workers=swarm_n, top_n=top_n)
+        try:
+            products = swarm.research_swarm(brain, n_workers=swarm_n,
+                                            top_n=top_n)
+        except Exception as e:
+            selfheal.record_incident("swarm", e)
+            products = []
         if not products:  # swarm came back empty -> safe fallback
             products = scout.run(brain, top_n=top_n)
     else:
@@ -80,6 +91,7 @@ def run_night():
                   f"{'+video' if res.get('video') else 'post'} "
                   f"[{style}] {res['product']}")
         except Exception as e:
+            selfheal.record_incident("factory", e)
             print(f"[factory] error on {product.get('product')}: {str(e)[:120]}")
         idx += 1
         # self-tune every 3 assets so it keeps learning through the night
@@ -88,8 +100,11 @@ def run_night():
             print(f"[optimize] gen {strat['generation']} "
                   f"best_style={bus.get_intel('strategy', {}).get('best')}")
 
-    # 3) final nightly self-fine-tune
+    # 3) final nightly self-fine-tune, then reflect into durable lessons
     strat = optimize.evolve()
+    lessons = reflect.reflect(brain)
+    print(f"[reflect] gen {lessons['generation']} | "
+          f"lesson: {lessons['guidance']}")
 
     # 4) accounting
     ledger.record("cost", config.COST_PER_RUN, note=f"night: {produced} assets")

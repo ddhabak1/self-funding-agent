@@ -29,8 +29,15 @@ def _asset_id(product, style):
 
 def _landing_post(brain, product, style_directive):
     """Write a persuasive, SEO landing article whose job is link clicks."""
+    try:
+        from .reflect import guidance
+        learned = guidance()
+    except Exception:
+        learned = ""
+    learned_line = (f"\nApply what has worked before: {learned}"
+                    if learned else "")
     prompt = f"""Write an original, genuinely useful ~600-word buyer's guide
-for people shopping for "{product}" on Amazon India. {style_directive}
+for people shopping for "{product}" on Amazon India. {style_directive}{learned_line}
 Use Markdown H2 sections: what to look for, top features that matter, common
 mistakes, and who each tier (budget / mid / premium) suits. Be specific and
 honest; do NOT invent fake brands, prices or statistics. Keep it skimmable.

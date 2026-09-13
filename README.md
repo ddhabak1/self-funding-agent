@@ -51,6 +51,9 @@ agent/
   videobrief.py optional render brief handed to the OpenMontage studio
   affiliate.py Amazon Associates tagged-link injection (compliant)
   optimize.py  self-tuning bandit over hook styles + category bias
+  selfheal.py  startup health checks, incident log, circuit breakers, auto-fixes
+  reflect.py   nightly reflection -> durable lessons fed back into prompts
+  watchdog.py  24x7 supervisor: restarts OmniRoute + the loop with backoff
   night.py     the all-night loop: scout/swarm -> videos -> self-tune
   orchestrator.py  the classic single-article cycle
   main.py      entry point (MODE=night | cycle)
@@ -90,6 +93,40 @@ produced first, so a run never ships nothing. Earnings can later fund
 OpenMontage's optional paid providers (Veo/Kling ~$1-4/video) with no code
 change. ruflo/OpenMontage are operator tooling and are git-ignored from this
 public site repo.
+
+## Self-healing & self-improvement (built to get more powerful over time)
+
+The agent is designed to survive unattended and grow stronger every night.
+
+**Self-healing (`selfheal.py`).** Every run opens with `preflight()`, which takes
+the agent's vitals — LLM backends, video renderer + ffmpeg, free disk, site
+integrity, daily budget — logs any failure to a rolling incident log, trips a
+per-component **circuit breaker** after repeated failures, and writes safe
+overrides back into the run so it *routes around* the damage instead of
+crashing:
+
+- renderer broken / low disk → disable video (and prune old media) for the run,
+- repeated swarm timeouts → automatically halve worker count + concurrency,
+- OmniRoute down → fall through to Gemini, then to the offline stub,
+- run `MODE=doctor` (also a CI preflight step) for a one-shot self-diagnosis.
+
+Incidents + health are committed to `state/`, so the healing memory persists
+across nights and machines.
+
+**Self-improvement (`reflect.py` + `optimize.py`).** Two nested learning loops:
+the epsilon-greedy bandit tunes *which* hook style / category to produce, and
+nightly **reflection** distills everything produced + earned into plain-language
+**lessons** (`state/lessons.md`) whose `guidance()` is injected straight back
+into the content prompts. Over many nights it stops repeating what didn't work
+and leans harder into what does — no human editing prompts.
+
+**24×7 durability (`watchdog.py`).** On a machine you own, the watchdog keeps
+OmniRoute up and restarts the night loop with exponential backoff if it ever
+exits — so it truly never stops:
+
+```bash
+nohup python -m agent.watchdog >> watchdog.log 2>&1 &
+```
 
 ## Run it
 

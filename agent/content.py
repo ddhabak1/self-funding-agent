@@ -11,11 +11,17 @@ from .affiliate import recommend, search_link
 def write_article(brain, idea):
     title = idea.get("title", "Untitled")
     category = idea.get("category", "")
+    try:
+        from .reflect import guidance
+        learned = guidance()
+    except Exception:
+        learned = ""
+    learned_line = f"\nApply what has worked before: {learned}" if learned else ""
     prompt = f"""Write a genuinely helpful, original ~650-word blog post titled
 "{title}" about {category}. Use clear Markdown with H2 sections. Be practical
 and specific: what to look for, key features, common mistakes, and who each
 option suits. Where natural, refer to product types/tiers (budget, mid-range,
-premium) WITHOUT inventing fake brands, prices, or stats. End with a short
+premium) WITHOUT inventing fake brands, prices, or stats.{learned_line} End with a short
 call-to-action. Return only the Markdown body."""
     body = brain.think(prompt)
     if body.startswith("[offline]") or not body.strip():

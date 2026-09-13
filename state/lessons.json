@@ -1,0 +1,45 @@
+{
+  "ts": "2026-09-13T18:24:31.761467+00:00",
+  "generation": 3,
+  "assets_seen": 6,
+  "best_styles": [
+    [
+      "secret_reveal",
+      1.884,
+      5
+    ],
+    [
+      "shock_stat",
+      1.848,
+      5
+    ],
+    [
+      "question_hook",
+      1.74,
+      3
+    ]
+  ],
+  "weak_styles": [],
+  "best_categories": [
+    [
+      "beauty",
+      1.845,
+      12
+    ],
+    [
+      "grooming",
+      1.74,
+      1
+    ]
+  ],
+  "weak_categories": [],
+  "video": {
+    "count": 2,
+    "avg_opportunity": 76.5
+  },
+  "post_only": {
+    "count": 4,
+    "avg_opportunity": 76.5
+  },
+  "guidance": "lean into beauty, grooming; favor hooks that Tease an insider secret most people don't know."
+}
