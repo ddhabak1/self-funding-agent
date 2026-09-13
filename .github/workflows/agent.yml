@@ -36,11 +36,14 @@ jobs:
 
       - name: Start OmniRoute (free LLM router)
         continue-on-error: true
+        timeout-minutes: 6
         run: |
-          npm i -g omniroute >/dev/null 2>&1 || echo "omniroute install failed; agent will fall back to Gemini"
+          # Native builds (onnxruntime/sharp/koffi) can stall; cap the install
+          # so a slow/hung npm can never block the job — we fall back to Gemini.
+          timeout 300 npm i -g omniroute >/dev/null 2>&1 \
+            || echo "omniroute install slow/failed; agent will use Gemini fallback"
           if command -v omniroute >/dev/null 2>&1; then
-            omniroute serve --daemon --no-open || true
-            # wait until the router answers (or give up after ~40s)
+            timeout 60 omniroute serve --daemon --no-open || true
             for i in $(seq 1 20); do
               curl -sf http://localhost:20128/v1/models >/dev/null 2>&1 && break
               curl -s http://localhost:20128/ >/dev/null 2>&1 && break
@@ -49,6 +52,7 @@ jobs:
           fi
 
       - name: Run the agent
+        timeout-minutes: 45
         env:
           MODE: ${{ github.event.inputs.mode || (github.event.schedule == '0 19 * * *' && 'night' || 'cycle') }}
           SWARM_WORKERS: ${{ vars.SWARM_WORKERS || '100' }}
