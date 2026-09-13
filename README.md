@@ -168,7 +168,15 @@ For a *truly continuous* machine (not scheduled batches), the best free-forever
 box is an **Oracle Cloud Always Free ARM VM** — run the watchdog under systemd
 and it never stops. A `Dockerfile` + `docker-compose.yml` + `fly.toml` +
 systemd unit are all included, and `AUTO_PUSH=1` lets a self-hosted box publish
-to Pages itself. **Full step-by-step for every option: [`deploy/DEPLOY.md`](deploy/DEPLOY.md).**
+to Pages itself.
+
+Need to run it on an **application server / PaaS** (Cloud Run, App Engine, Azure
+App Service, Render, Railway, Heroku-style)? It ships an HTTP adapter
+(`agent/server.py`, stdlib-only) that binds `$PORT` and serves
+`/health`, `/status`, `/` (dashboard) and `POST /run` — while auto-running the
+autonomous loop in the background. Use `RUN_TARGET=server` (Docker) or the
+included `Procfile` / `render.yaml`. **Full step-by-step for every option:
+[`deploy/DEPLOY.md`](deploy/DEPLOY.md).**
 
 ## Scaling honestly (why we DON'T self-replicate)
 

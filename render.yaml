@@ -1,0 +1,29 @@
+# Render.com Blueprint — one-click deploy as an HTTP application server.
+#   Render → New → Blueprint → point at this repo.
+# NOTE: Render's FREE web service sleeps after ~15 min idle, so the background
+# loop only runs while the service is awake (a health pinger or the paid
+# "always-on" plan gives true 24x7). For continuous free, prefer an Oracle
+# Always Free VM (see deploy/DEPLOY.md).
+services:
+  - type: web
+    name: self-funding-agent
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: RUN_TARGET
+        value: server
+      - key: SERVER_AUTORUN
+        value: "1"
+      - key: SERVER_RUN_MODE
+        value: night
+      - key: AUTO_PUSH
+        value: "1"
+      - key: OMNIROUTE_MODEL
+        value: auto
+      - key: AFFILIATE_TAG
+        sync: false          # set in the Render dashboard
+      - key: GH_PAT
+        sync: false          # fine-grained PAT for git push (see DEPLOY.md)
+      - key: GEMINI_API_KEY
+        sync: false

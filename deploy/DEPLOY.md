@@ -94,6 +94,45 @@ survive restarts.
 
 ---
 
+## Tier 2 (alt) — Application server / PaaS (HTTP, port-based)
+
+Platforms like **Google Cloud Run, App Engine, Azure App Service, Render,
+Railway, or any Heroku-style host** expect a process that **binds `$PORT` and
+answers health checks** rather than a bare loop. The agent ships an HTTP adapter
+for exactly this (`agent/server.py`, standard-library only):
+
+| Route | Method | Purpose |
+|---|---|---|
+| `/health` (`/healthz`,`/readyz`) | GET | JSON vitals for the platform probe (200 healthy / 503 degraded) |
+| `/status` | GET | balance, strategy generation, learned guidance, recent activity |
+| `/` | GET | tiny HTML dashboard |
+| `/run?mode=cycle\|night` | POST | trigger one run in the background |
+
+By default it **also auto-starts the autonomous loop in a background thread**
+(`SERVER_AUTORUN=1`), so a single instance is both a healthy web service *and*
+the 24×7 worker.
+
+**Run it:**
+```bash
+PORT=8080 python -m agent.server          # local
+RUN_TARGET=server docker run -e PORT=8080 -p 8080:8080 self-funding-agent
+```
+
+- **Buildpack platforms (Render/Railway/Heroku-style):** a `Procfile` is
+  included (`web:` = server, `worker:` = watchdog). A Render Blueprint
+  (`render.yaml`) gives one-click deploy.
+- **Container platforms (Cloud Run / App Engine / Azure):** deploy the
+  `Dockerfile` and set env `RUN_TARGET=server`; the container binds `$PORT`.
+
+⚠️ **Honest caveat about "free" app servers and 24×7:** many free web tiers
+**sleep on inactivity** (Render free) or **scale to zero** (Cloud Run with
+`min-instances=0`), which *pauses the background loop*. For genuine always-on
+you need `min-instances=1` (Cloud Run, small cost), an always-on plan, or —
+cheapest — the **Oracle Always Free VM worker** above. Use the app-server mode
+when you specifically want an HTTP endpoint / dashboard / manual triggers.
+
+---
+
 ## Configuration (the `.env`)
 
 | Var | Needed? | What it does |

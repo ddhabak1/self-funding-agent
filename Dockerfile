@@ -31,7 +31,10 @@ ENV MODE=night \
     AUTO_PUSH=1 \
     OMNIROUTE_URL=http://localhost:20128/v1 \
     OMNIROUTE_MODEL=auto \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    RUN_TARGET=watchdog
 
-# The watchdog ensures OmniRoute is up and restarts the loop on any exit.
-CMD ["python", "-m", "agent.watchdog"]
+# RUN_TARGET=server -> HTTP app-server mode (binds $PORT, health checks) for
+# PaaS like Cloud Run / App Engine / Render / Azure App Service. Default
+# 'watchdog' is the pure 24x7 worker for VMs / docker-compose.
+CMD ["sh", "-c", "if [ \"$RUN_TARGET\" = server ]; then exec python -m agent.server; else exec python -m agent.watchdog; fi"]
