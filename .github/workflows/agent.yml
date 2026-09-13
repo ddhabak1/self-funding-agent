@@ -4,7 +4,7 @@ name: autonomous-agent
 on:
   schedule:
     - cron: "0 19 * * *"   # nightly heavy run (~00:30 IST) - scout+swarm+videos
-    - cron: "0 */6 * * *"  # lighter refresh every 6 hours
+    - cron: "0 */3 * * *"  # keep working through the day - refresh every 3h
   workflow_dispatch:
     inputs:
       mode:
