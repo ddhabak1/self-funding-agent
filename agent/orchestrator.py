@@ -58,6 +58,17 @@ def run_cycle(make_short=False):
     path = publish(post)
     print(f"[content] published: {path.name}")
 
+    # 3b) SHARE it on the public internet + refresh discovery feeds
+    try:
+        from . import distribute
+        asset = {"post": path.name, "product": idea.get("title", post["title"]),
+                 "category": idea.get("category", ""), "title": post["title"]}
+        dist = distribute.distribute(brain, asset, idea.get("title"))
+        print(f"[share] -> {dist['auto_posted'] or 'queued'} | {dist['landing_url']}")
+        distribute.build_feed_and_sitemap()
+    except Exception as e:
+        print(f"[share] skipped: {str(e)[:120]}")
+
     # 4) Optional shorts agent (heavy; off by default in the content loop)
     if make_short:
         try:

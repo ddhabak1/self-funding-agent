@@ -1,0 +1,53 @@
+{
+  "ts": "2026-09-13T18:57:09.169625+00:00",
+  "channels": [
+    {
+      "channel": "seo_blog",
+      "score": 0.595,
+      "clickable": true,
+      "note": "The owned site itself; compounding Google traffic."
+    },
+    {
+      "channel": "pinterest",
+      "score": 0.525,
+      "clickable": true,
+      "note": "Evergreen shopping intent; pins link straight to landing."
+    },
+    {
+      "channel": "youtube_shorts",
+      "score": 0.522,
+      "clickable": true,
+      "note": "Massive in India; description links allowed; buyer intent."
+    },
+    {
+      "channel": "instagram_reels",
+      "score": 0.405,
+      "clickable": false,
+      "note": "Huge reach; funnel via link-in-bio to the landing page."
+    },
+    {
+      "channel": "quora",
+      "score": 0.39,
+      "clickable": true,
+      "note": "Answers rank on Google for years; buyer questions."
+    },
+    {
+      "channel": "facebook_reels",
+      "score": 0.36,
+      "clickable": true,
+      "note": "Older buyers with money; groups + reels; links allowed."
+    }
+  ],
+  "category_angles": {
+    "beauty": "Skincare that survives Indian humidity—no grease, just glow.",
+    "grooming": "Salon-level beard and shave at home, without the salon bill."
+  },
+  "priority": [
+    "seo_blog",
+    "pinterest",
+    "youtube_shorts",
+    "instagram_reels",
+    "quora",
+    "facebook_reels"
+  ]
+}

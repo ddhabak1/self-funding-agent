@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
 Sitemap: https://ddhabak1.github.io/self-funding-agent/sitemap.xml

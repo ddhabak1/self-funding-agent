@@ -16,7 +16,8 @@ import os
 import time
 from datetime import datetime, timezone
 
-from . import bus, config, gitsync, ledger, optimize, reflect, scout, selfheal
+from . import (bus, config, distribute, gitsync, ledger, optimize, reach,
+               reflect, scout, selfheal)
 from .brain import Brain
 from .factory import make_asset
 
@@ -74,6 +75,10 @@ def run_night():
         print(f"   - {p['product']}  (heat {p['heat']}, "
               f"comm {int(p['commission']*100)}%, opp {p['opportunity']})")
 
+    # 1b) research the best reachable places to promote tonight's picks
+    rplan = reach.plan(brain, products)
+    print(f"[reach] promote via: {', '.join(rplan['priority'])}")
+
     # 2) grind: cycle products x styles, self-tuning as we go
     produced = 0
     idx = 0
@@ -90,6 +95,13 @@ def run_night():
             print(f"[factory] {produced}/{max_assets} "
                   f"{'+video' if res.get('video') else 'post'} "
                   f"[{style}] {res['product']}")
+            # 2b) SHARE it on the public internet + queue platform packs
+            try:
+                dist = distribute.distribute(brain, res, product)
+                print(f"[share] {res['product']} -> "
+                      f"{dist['auto_posted'] or 'queued'} | {dist['landing_url']}")
+            except Exception as e:
+                selfheal.record_incident("distribute", e)
         except Exception as e:
             selfheal.record_incident("factory", e)
             print(f"[factory] error on {product.get('product')}: {str(e)[:120]}")
@@ -99,6 +111,13 @@ def run_night():
             strat = optimize.evolve()
             print(f"[optimize] gen {strat['generation']} "
                   f"best_style={bus.get_intel('strategy', {}).get('best')}")
+
+    # 2c) refresh organic-discovery feeds so search engines surface it 24x7
+    try:
+        n = distribute.build_feed_and_sitemap()
+        print(f"[share] rebuilt RSS + sitemap ({n} posts)")
+    except Exception as e:
+        selfheal.record_incident("feeds", e)
 
     # 3) final nightly self-fine-tune, then reflect into durable lessons
     strat = optimize.evolve()

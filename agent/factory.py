@@ -71,6 +71,11 @@ def make_asset(brain, product, style=None):
 
     title = _title_for(prod, style)
     body = _landing_post(brain, prod, directive)
+    # Conversion CTA up top — the first thing a reader sees drives the click.
+    cta = (f"> 💡 **In a hurry?** See the current best-value **"
+           f"[{prod}]({search_link(search_q)})** deals on Amazon "
+           f"India — updated daily.\n\n")
+    body = cta + body
     body += (f"\n\n## Where to buy\n\nBrowse current best-sellers and live "
              f"deals for **[{prod}]({search_link(search_q)})** on Amazon.\n")
     body += recommend(brain, title, body)

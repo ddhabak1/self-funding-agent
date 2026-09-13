@@ -53,6 +53,8 @@ agent/
   optimize.py  self-tuning bandit over hook styles + category bias
   selfheal.py  startup health checks, incident log, circuit breakers, auto-fixes
   reflect.py   nightly reflection -> durable lessons fed back into prompts
+  reach.py     researches the best reachable places to promote (reach x convert)
+  distribute.py shares each asset on the public internet + RSS/sitemap for SEO
   watchdog.py  24x7 supervisor: restarts OmniRoute + the loop with backoff
   night.py     the all-night loop: scout/swarm -> videos -> self-tune
   orchestrator.py  the classic single-article cycle
@@ -93,6 +95,34 @@ produced first, so a run never ships nothing. Earnings can later fund
 OpenMontage's optional paid providers (Veo/Kling ~$1-4/video) with no code
 change. ruflo/OpenMontage are operator tooling and are git-ignored from this
 public site repo.
+
+## Reach research + public-internet distribution (24×7 funnel)
+Making content isn't enough — it has to be *seen*. Two agents close the funnel:
+
+**`reach.py`** researches WHERE to reach Indian Amazon buyers and ranks every
+channel by `reach × conversion` (YouTube Shorts, Instagram/Facebook Reels,
+Pinterest, Telegram, Reddit, Quora, X, and the owned SEO blog). Each night it
+saves a `state/reach_plan.json` with the priority channels + an LLM-written,
+honest content *angle* per product category.
+
+**`distribute.py`** turns each asset into platform-ready **content packs** (one
+tailored caption/script per channel, FTC `#ad` disclosure, funnelling to the
+on-site landing page — never a raw affiliate link in a social caption, which is
+what keeps the accounts alive). It:
+- **auto-posts for free** where an open API + token exists — Telegram Bot API,
+  Discord webhook, or a generic `SOCIAL_WEBHOOK_URL` (→ Zapier/IFTTT/Make to
+  fan out to Instagram/YouTube/Facebook). All are safe no-ops without creds.
+- **queues** every pack to `state/distribution/<slug>.json` so platforms that
+  need your OAuth (IG/YouTube/FB) have ready-to-publish copy waiting.
+- rebuilds **`docs/feed.xml` (RSS) + `docs/sitemap.xml` + `docs/robots.txt`**
+  every run, so Google/Bing keep discovering new pages — free organic reach 24×7.
+
+Honest framing: fully-automated posting to Instagram/YouTube/Facebook requires
+*your* OAuth tokens; until you add them the system **prepares and queues**
+platform-ready content and auto-posts only where free tokens exist. RSS + SEO
+give real public reach immediately. Optional env in `.env.example`:
+`TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, `DISCORD_WEBHOOK_URL`,
+`SOCIAL_WEBHOOK_URL`.
 
 ## Self-healing & self-improvement (built to get more powerful over time)
 
