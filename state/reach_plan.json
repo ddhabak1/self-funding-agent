@@ -1,5 +1,5 @@
 {
-  "ts": "2026-09-13T18:57:09.169625+00:00",
+  "ts": "2026-09-13T19:03:31.987414+00:00",
   "channels": [
     {
       "channel": "seo_blog",
@@ -38,10 +38,7 @@
       "note": "Older buyers with money; groups + reels; links allowed."
     }
   ],
-  "category_angles": {
-    "beauty": "Skincare that survives Indian humidity—no grease, just glow.",
-    "grooming": "Salon-level beard and shave at home, without the salon bill."
-  },
+  "category_angles": {},
   "priority": [
     "seo_blog",
     "pinterest",

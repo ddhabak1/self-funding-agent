@@ -1,45 +1,66 @@
 {
-  "ts": "2026-09-13T18:24:31.761467+00:00",
-  "generation": 3,
-  "assets_seen": 6,
+  "ts": "2026-09-13T19:03:36.423636+00:00",
+  "generation": 6,
+  "assets_seen": 12,
   "best_styles": [
     [
-      "secret_reveal",
-      1.884,
-      5
+      "shock_stat",
+      1.838,
+      11
     ],
     [
-      "shock_stat",
-      1.848,
-      5
+      "secret_reveal",
+      1.788,
+      29
     ],
     [
       "question_hook",
       1.74,
-      3
+      6
     ]
   ],
   "weak_styles": [],
   "best_categories": [
     [
       "beauty",
-      1.845,
-      12
+      1.847,
+      32
     ],
     [
       "grooming",
       1.74,
-      1
+      7
+    ],
+    [
+      "kitchen",
+      1.612,
+      5
     ]
   ],
-  "weak_categories": [],
+  "weak_categories": [
+    [
+      "grooming",
+      1.74,
+      7
+    ],
+    [
+      "kitchen",
+      1.612,
+      5
+    ],
+    [
+      "decor",
+      1.58,
+      2
+    ]
+  ],
   "video": {
     "count": 2,
     "avg_opportunity": 76.5
   },
   "post_only": {
-    "count": 4,
-    "avg_opportunity": 76.5
+    "count": 10,
+    "avg_opportunity": 72.3
   },
-  "guidance": "lean into beauty, grooming; favor hooks that Tease an insider secret most people don't know."
+  "guidance": "lean into beauty, grooming, kitchen; favor hooks that Open with a surprising number or statistic."
 }

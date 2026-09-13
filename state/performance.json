@@ -64,5 +64,71 @@
     "video": "media/2026-09-13-beard-trimmer-kit-secretreveal/short.mp4",
     "created": "2026-09-13T17:15:05.380192+00:00",
     "logged": "2026-09-13T17:16:42.031964+00:00"
+  },
+  {
+    "id": "8fd28f94d239",
+    "product": "Vitamin C face serum",
+    "category": "beauty",
+    "style": "secret_reveal",
+    "opportunity": 81.0,
+    "post": "2026-09-13-vitamin-c-face-serum-secretreveal.md",
+    "video": null,
+    "created": "2026-09-13T19:03:31.991180+00:00",
+    "logged": "2026-09-13T19:03:33.454972+00:00"
+  },
+  {
+    "id": "9f28ca0ec528",
+    "product": "Beard trimmer kit",
+    "category": "grooming",
+    "style": "secret_reveal",
+    "opportunity": 72.0,
+    "post": "2026-09-13-beard-trimmer-kit-secretreveal.md",
+    "video": null,
+    "created": "2026-09-13T19:03:33.459240+00:00",
+    "logged": "2026-09-13T19:03:34.015025+00:00"
+  },
+  {
+    "id": "7d72dd5a479c",
+    "product": "Air fryer 4L",
+    "category": "kitchen",
+    "style": "secret_reveal",
+    "opportunity": 72.0,
+    "post": "2026-09-13-air-fryer-4l-secretreveal.md",
+    "video": null,
+    "created": "2026-09-13T19:03:34.018920+00:00",
+    "logged": "2026-09-13T19:03:35.649647+00:00"
+  },
+  {
+    "id": "a796b8e70ca9",
+    "product": "Ceramic hair straightener",
+    "category": "beauty",
+    "style": "secret_reveal",
+    "opportunity": 72.0,
+    "post": "2026-09-13-ceramic-hair-straightener-secretreveal.md",
+    "video": null,
+    "created": "2026-09-13T19:03:35.656748+00:00",
+    "logged": "2026-09-13T19:03:35.802348+00:00"
+  },
+  {
+    "id": "6b99a5c6832c",
+    "product": "LED strip lights",
+    "category": "decor",
+    "style": "secret_reveal",
+    "opportunity": 64.0,
+    "post": "2026-09-13-led-strip-lights-secretreveal.md",
+    "video": null,
+    "created": "2026-09-13T19:03:35.806503+00:00",
+    "logged": "2026-09-13T19:03:36.152717+00:00"
+  },
+  {
+    "id": "d7ec7233c1a3",
+    "product": "Non-stick cookware set",
+    "category": "kitchen",
+    "style": "secret_reveal",
+    "opportunity": 56.0,
+    "post": "2026-09-13-nonstick-cookware-set-secretreveal.md",
+    "video": null,
+    "created": "2026-09-13T19:03:36.156727+00:00",
+    "logged": "2026-09-13T19:03:36.411649+00:00"
   }
 ]
