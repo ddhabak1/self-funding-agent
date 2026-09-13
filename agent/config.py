@@ -25,6 +25,7 @@ SURVIVAL_THRESHOLD = float(os.environ.get("SURVIVAL_THRESHOLD", "-5.0"))
 
 # Affiliate / monetization config (wire to real values when ready).
 AFFILIATE_TAG = os.environ.get("AFFILIATE_TAG", "")
+AMAZON_DOMAIN = os.environ.get("AMAZON_DOMAIN", "www.amazon.in")
 
 # Public site location (used for canonical URLs, sitemap, RSS).
 SITE_URL = os.environ.get("SITE_URL", "https://ddhabak1.github.io")

@@ -3,6 +3,7 @@ import json
 import random
 
 from . import config
+from .affiliate import recommend
 from .brain import Brain
 
 
@@ -42,6 +43,7 @@ call-to-action. Do not fabricate statistics. Return only the Markdown body."""
 def create_content(brain, memory):
     idea = pick_topic(brain, memory)
     body = write_article(brain, idea)
+    body += recommend(brain, idea.get("title", "Untitled"), body)
     return {
         "title": idea.get("title", "Untitled"),
         "slug": idea.get("slug") or _slug(idea.get("title", "post")),
