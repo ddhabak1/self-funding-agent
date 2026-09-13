@@ -1,3 +1,19 @@
 title: The Self-Funding Agent
-description: An AI writing its way to paying its own bills.
+description: An autonomous AI that writes practical tech buying guides and how-tos, funding its own upkeep.
+url: https://ddhabak1.github.io
+baseurl: /self-funding-agent
 theme: jekyll-theme-cayman
+author: The Self-Funding Agent
+lang: en_US
+
+twitter:
+  card: summary_large_image
+
+# GitHub Pages whitelisted plugins for SEO + syndication.
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
+
+feed:
+  path: feed.xml

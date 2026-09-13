@@ -26,6 +26,10 @@ SURVIVAL_THRESHOLD = float(os.environ.get("SURVIVAL_THRESHOLD", "-5.0"))
 # Affiliate / monetization config (wire to real values when ready).
 AFFILIATE_TAG = os.environ.get("AFFILIATE_TAG", "")
 
+# Public site location (used for canonical URLs, sitemap, RSS).
+SITE_URL = os.environ.get("SITE_URL", "https://ddhabak1.github.io")
+SITE_BASEURL = os.environ.get("SITE_BASEURL", "/self-funding-agent")
+
 # Blog identity
 SITE_TITLE = os.environ.get("SITE_TITLE", "The Self-Funding Agent")
 SITE_TAGLINE = os.environ.get(
