@@ -3,8 +3,13 @@ name: autonomous-agent
 # Free 24x7 scheduler. GitHub Actions runs this on a cron for $0.
 on:
   schedule:
-    - cron: "0 */6 * * *"   # every 6 hours
-  workflow_dispatch: {}       # manual "wake up" button
+    - cron: "0 19 * * *"   # nightly heavy run (~00:30 IST) - scout+swarm+videos
+    - cron: "0 */6 * * *"  # lighter refresh every 6 hours
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "cycle (1 article) or night (scout+swarm+videos)"
+        default: "night"
 
 permissions:
   contents: write            # lets the agent commit new posts + ledger
@@ -23,10 +28,36 @@ jobs:
         with:
           python-version: "3.12"
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
       - run: pip install -r requirements.txt
+
+      - name: Start OmniRoute (free LLM router)
+        continue-on-error: true
+        run: |
+          npm i -g omniroute >/dev/null 2>&1 || echo "omniroute install failed; agent will fall back to Gemini"
+          if command -v omniroute >/dev/null 2>&1; then
+            omniroute serve --daemon --no-open || true
+            # wait until the router answers (or give up after ~40s)
+            for i in $(seq 1 20); do
+              curl -sf http://localhost:20128/v1/models >/dev/null 2>&1 && break
+              curl -s http://localhost:20128/ >/dev/null 2>&1 && break
+              sleep 2
+            done
+          fi
 
       - name: Run the agent
         env:
+          MODE: ${{ github.event.inputs.mode || (github.event.schedule == '0 19 * * *' && 'night' || 'cycle') }}
+          SWARM_WORKERS: ${{ vars.SWARM_WORKERS || '100' }}
+          SWARM_CONCURRENCY: ${{ vars.SWARM_CONCURRENCY || '6' }}
+          NIGHT_MAX_ASSETS: ${{ vars.NIGHT_MAX_ASSETS || '6' }}
+          MAKE_VIDEO: ${{ vars.MAKE_VIDEO || '1' }}
+          LLM_BACKEND: ${{ vars.LLM_BACKEND || 'auto' }}
+          OMNIROUTE_URL: http://localhost:20128/v1
+          OMNIROUTE_MODEL: ${{ vars.OMNIROUTE_MODEL || 'auto' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-3.6-flash' }}
           COST_PER_RUN: ${{ vars.COST_PER_RUN || '0.0' }}
@@ -34,10 +65,23 @@ jobs:
           AFFILIATE_TAG: ${{ vars.AFFILIATE_TAG }}
         run: python -m agent.main
 
+      - name: Upload generated videos (for manual/API posting to Shorts)
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: promo-videos-${{ github.run_id }}
+          path: media/**/short.mp4
+          if-no-files-found: ignore
+          retention-days: 7
+
       - name: Commit results
         run: |
           git config user.name "autonomous-agent"
           git config user.email "agent@users.noreply.github.com"
+          # NB: only site + learning state is committed; heavy videos stay as
+          # build artifacts to keep the Pages repo lean.
           git add docs state
-          git commit -m "agent: new content + ledger update" || echo "nothing to commit"
+          git commit -m "agent: new content + ledger + learned strategy" || echo "nothing to commit"
+          git pull --rebase --autostash || true
           git push

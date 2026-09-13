@@ -1,0 +1,48 @@
+{
+  "styles": {
+    "shock_stat": {
+      "count": 5,
+      "reward": 9.24
+    },
+    "mistake_warning": {
+      "count": 0,
+      "reward": 0.0
+    },
+    "before_after": {
+      "count": 0,
+      "reward": 0.0
+    },
+    "myth_bust": {
+      "count": 0,
+      "reward": 0.0
+    },
+    "countdown": {
+      "count": 0,
+      "reward": 0.0
+    },
+    "question_hook": {
+      "count": 3,
+      "reward": 5.22
+    },
+    "secret_reveal": {
+      "count": 5,
+      "reward": 9.42
+    },
+    "price_shock": {
+      "count": 0,
+      "reward": 0.0
+    }
+  },
+  "categories": {
+    "beauty": {
+      "count": 12,
+      "reward": 22.14
+    },
+    "grooming": {
+      "count": 1,
+      "reward": 1.74
+    }
+  },
+  "updated": "2026-09-13T17:16:42.033235+00:00",
+  "generation": 3
+}

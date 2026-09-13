@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 .env
 media/
+
+# runtime message-bus DB (regenerated each run)
+state/agentbus.db

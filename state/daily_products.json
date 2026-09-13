@@ -1,0 +1,86 @@
+{
+  "date": "2026-09-13",
+  "source": "fallback",
+  "products": [
+    {
+      "product": "Vitamin C face serum",
+      "search_query": "vitamin c face serum",
+      "category": "beauty",
+      "heat": 9,
+      "commission": 0.09,
+      "opportunity": 81.0
+    },
+    {
+      "product": "Beard trimmer kit",
+      "search_query": "beard trimmer for men",
+      "category": "grooming",
+      "heat": 8,
+      "commission": 0.09,
+      "opportunity": 72.0
+    },
+    {
+      "product": "Air fryer 4L",
+      "search_query": "air fryer 4 litre",
+      "category": "kitchen",
+      "heat": 9,
+      "commission": 0.08,
+      "opportunity": 72.0
+    },
+    {
+      "product": "Ceramic hair straightener",
+      "search_query": "hair straightener",
+      "category": "beauty",
+      "heat": 8,
+      "commission": 0.09,
+      "opportunity": 72.0
+    },
+    {
+      "product": "LED strip lights",
+      "search_query": "led strip lights for room",
+      "category": "decor",
+      "heat": 8,
+      "commission": 0.08,
+      "opportunity": 64.0
+    },
+    {
+      "product": "Non-stick cookware set",
+      "search_query": "non stick cookware set",
+      "category": "kitchen",
+      "heat": 7,
+      "commission": 0.08,
+      "opportunity": 56.0
+    },
+    {
+      "product": "Whey protein 1kg",
+      "search_query": "whey protein 1kg",
+      "category": "supplement",
+      "heat": 8,
+      "commission": 0.07,
+      "opportunity": 56.0
+    },
+    {
+      "product": "Insulated water bottle",
+      "search_query": "insulated steel water bottle",
+      "category": "home",
+      "heat": 7,
+      "commission": 0.08,
+      "opportunity": 56.0
+    },
+    {
+      "product": "Yoga mat 6mm",
+      "search_query": "yoga mat 6mm anti slip",
+      "category": "fitness",
+      "heat": 7,
+      "commission": 0.06,
+      "opportunity": 42.0
+    },
+    {
+      "product": "Resistance bands set",
+      "search_query": "resistance bands set",
+      "category": "fitness",
+      "heat": 7,
+      "commission": 0.06,
+      "opportunity": 42.0
+    }
+  ]
+}

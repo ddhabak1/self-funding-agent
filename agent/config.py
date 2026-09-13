@@ -11,9 +11,41 @@ LEDGER_PATH = STATE_DIR / "ledger.json"
 MEMORY_PATH = STATE_DIR / "memory.json"
 
 # --- Brain -----------------------------------------------------------------
+# Which LLM backend to prefer:
+#   "auto"      -> try OmniRoute first (free multi-provider router), then
+#                  fall back to the Gemini SDK, then offline stub.
+#   "omniroute" -> OmniRoute only (never touches the Gemini quota).
+#   "gemini"    -> Gemini SDK only (classic behaviour).
+LLM_BACKEND = os.environ.get("LLM_BACKEND", "auto").lower()
+
+# OmniRoute — local OpenAI-compatible router that aggregates many free-tier
+# / keyless LLM providers with automatic fallback. Running it sidesteps the
+# Gemini free-tier 429 quota entirely. Start it with `omniroute serve`.
+OMNIROUTE_URL = os.environ.get("OMNIROUTE_URL", "http://localhost:20128/v1")
+OMNIROUTE_MODEL = os.environ.get("OMNIROUTE_MODEL", "auto")
+OMNIROUTE_API_KEY = os.environ.get("OMNIROUTE_API_KEY", "")
+# Seconds to wait on an OmniRoute request (free providers can be slow).
+OMNIROUTE_TIMEOUT = int(os.environ.get("OMNIROUTE_TIMEOUT", "90"))
+
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 # Free-tier friendly model. Override with env if you like.
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.6-flash")
+# Max live model calls per day (protects the free-tier quota; raise once
+# API billing is enabled). 0 = unlimited.
+DAILY_CALL_BUDGET = int(os.environ.get("DAILY_CALL_BUDGET", "40"))
+# Whether to use Google Search grounding for research (needs quota/billing).
+ENABLE_GROUNDING = os.environ.get("ENABLE_GROUNDING", "1") == "1"
+
+# --- Research swarm --------------------------------------------------------
+# Number of LOGICAL research workers to dispatch each night. These all run
+# inside THIS one environment (a bounded thread pool) sharing the message bus
+# — no extra accounts, no self-replication. Set 0 to use the single scout.
+SWARM_WORKERS = int(os.environ.get("SWARM_WORKERS", "0"))
+# How many workers may hit the LLM at once (protects the router / quota).
+SWARM_CONCURRENCY = int(os.environ.get("SWARM_CONCURRENCY", "6"))
+# Seconds before a single worker is abandoned (must exceed the LLM timeout
+# below, or busy workers get killed mid-request under load).
+SWARM_WORKER_TIMEOUT = int(os.environ.get("SWARM_WORKER_TIMEOUT", "150"))
 
 # --- Economics (all USD) ---------------------------------------------------
 # What the agent believes it costs to stay alive each run/month.

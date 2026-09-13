@@ -1,79 +1,125 @@
 # The Self-Funding Agent 🤖💸
 
-An autonomous agent whose goals are: **(1) run 24×7** and **(2) earn enough
-money to pay for its own survival.** It wakes on a schedule, writes a blog
-post with Gemini, publishes it to a free website, and tracks its own P&L in a
-ledger. If it runs out of money, it stops itself.
+An autonomous agent whose goals are: **(1) run 24×7**, **(2) earn enough money
+to pay for its own survival**, and **(3) learn and improve itself with no human
+in the loop.** Every night it researches what actually earns, mass-produces
+monetized content + HD promo videos, and self-tunes which styles win.
 
-> ⚠️ **Honest expectations.** Making real money from fresh content is slow and
-> not guaranteed. This gives the agent a *real, closeable* revenue loop
-> (affiliate/ads) plus honest accounting — not a magic money printer. Revenue
-> only becomes real once you connect an approved affiliate/ad account.
+> ⚠️ **Honest expectations.** Real affiliate income is slow and never
+> guaranteed. This is a *real, closeable* revenue loop with honest accounting —
+> not a magic money printer. Revenue becomes real once your Amazon Associates /
+> ad account is approved and traffic arrives.
 
-## How the three goals are met
+## How the goals are met — all $0
 
 | Goal | How | Cost |
 |------|-----|------|
-| Run 24×7 | GitHub Actions cron (`.github/workflows/agent.yml`) | $0 |
-| A place to live / publish | GitHub Pages serves `docs/` | $0 |
-| A brain | Gemini API free tier | $0 |
-| Earn money | Content + affiliate/ad hooks in `publish.py` | — |
+| Run 24×7 | GitHub Actions cron + optional 24×7 host | $0 |
+| A place to publish | GitHub Pages serves `docs/` | $0 |
+| A brain (no rate limits) | **OmniRoute** free/keyless LLM router, Gemini fallback | $0 |
+| Find what earns | Scout + 100-worker research **swarm** | $0 |
+| Make content that converts | Content + HD Shorts factory with affiliate links | $0 |
+| Learn & improve | Bandit **self-tuning** over viral hook styles | $0 |
 | "Survive" | `ledger.py` tracks balance; halts if broke | — |
+
+## The brain: OmniRoute (no more 429s)
+
+The agent talks to a local **[OmniRoute](https://www.npmjs.com/package/omniroute)**
+server — an OpenAI-compatible router that aggregates many free / keyless LLM
+providers with automatic fallback. This sidesteps the Gemini free-tier quota
+entirely. `brain.py` cascades: **OmniRoute → Gemini SDK → offline stub**.
+
+```bash
+npm i -g omniroute && omniroute serve --daemon --no-open   # http://localhost:20128/v1
+```
+
+Backend is env-selectable: `LLM_BACKEND=auto|omniroute|gemini`.
 
 ## Architecture
 
 ```
 agent/
   config.py    all settings (env-driven)
-  brain.py     Gemini wrapper (offline stub if no key)
-  content.py   picks a topic + writes the article
-  publish.py   writes Markdown to docs/ + affiliate footer
-  ledger.py    money in/out, solvency check ("survival")
-  main.py      the loop: observe -> decide -> act -> account
-docs/          the public blog (GitHub Pages)
-state/         ledger.json + memory.json (persisted via git)
+  brain.py     backend-agnostic LLM: OmniRoute -> Gemini -> offline
+  bus.py       SQLite message bus (agents communicate)
+  scout.py     nightly top-10 best-selling + HIGH-COMMISSION products
+  swarm.py     100 logical research agents (concurrent, one environment)
+  trends.py    picks the most viral, monetizable idea
+  content.py   writes the on-site article
+  factory.py   product -> landing post + styled HD promo video + affiliate links
+  shorts.py    HD 1080x1920 per-frame video renderer + free TTS voiceover
+  affiliate.py Amazon Associates tagged-link injection (compliant)
+  optimize.py  self-tuning bandit over hook styles + category bias
+  night.py     the all-night loop: scout/swarm -> videos -> self-tune
+  orchestrator.py  the classic single-article cycle
+  main.py      entry point (MODE=night | cycle)
+docs/          the public blog (GitHub Pages, SEO-ready)
+state/         ledger, memory, strategy, performance, daily_products (git-persisted)
+media/         generated videos (CI artifacts; git-ignored)
 ```
 
-## Quick start (local test — no key needed)
+### Why a *commission* model matters
+Phones/laptops/TVs sell hugely but pay ~1-2%. Beauty, grooming, home, kitchen,
+health and fashion pay ~5-9%. The scout scores every candidate by
+`opportunity = demand × commission`, so the agent chases **earnings**, not just
+popularity.
+
+### Self-tuning
+`optimize.py` runs an epsilon-greedy bandit over viral hook archetypes
+(`shock_stat`, `mistake_warning`, `secret_reveal`, `price_shock`, …). Styles
+that earn clicks get produced more; the rest fade. Rewards come from real
+metrics when available (`state/metrics.json`: views/clicks/earnings), so it
+starts learning immediately and improves as real numbers arrive. Strategy is
+committed back to the repo, so learning persists across nights and machines.
+
+## Run it
 
 ```bash
 cd autonomous-agent
 python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt        # optional for offline test
-python -m agent.main                    # runs in offline stub mode
-```
+pip install -r requirements.txt
+npm i -g omniroute && omniroute serve --daemon --no-open   # free brain
 
-You'll see a placeholder post in `docs/posts/` and a `state/ledger.json`.
+# one article (classic cycle)
+python -m agent.main
+
+# a full autonomous night: scout/swarm -> HD videos -> self-tune
+MODE=night SWARM_WORKERS=100 NIGHT_MAX_ASSETS=10 MAKE_VIDEO=1 python -m agent.main
+
+# true all-night grind on a 24x7 host you own:
+MODE=night NIGHT_HOURS=8 python -m agent.main
+```
 
 ## Go live (still $0)
 
-1. **Get a free Gemini API key** at https://aistudio.google.com (this is
-   separate from the consumer Gemini app subscription).
-2. Push this folder to a **new GitHub repo**.
-3. Repo → Settings → **Secrets and variables → Actions**:
-   - New **secret** `GEMINI_API_KEY` = your key.
-   - (optional) **variables** `AFFILIATE_TAG`, `SURVIVAL_THRESHOLD`, etc.
-4. Repo → Settings → **Pages** → Source: *Deploy from branch* → `main` / `docs`.
-   (Optionally enable a Markdown theme with a `docs/_config.yml`.)
-5. The workflow runs every 6 hours automatically. Use **Actions →
-   autonomous-agent → Run workflow** to wake it manually.
+1. Free Gemini API key at https://aistudio.google.com (fallback brain).
+2. Push to a public GitHub repo.
+3. Settings → Secrets/variables → Actions: secret `GEMINI_API_KEY`; variables
+   `AFFILIATE_TAG`, `AMAZON_DOMAIN`, `SWARM_WORKERS`, `NIGHT_MAX_ASSETS`, etc.
+4. Settings → Pages → Deploy from branch → `main` / `docs`.
+5. The **nightly** cron runs the scout+swarm+video factory; a lighter 6-hourly
+   cron keeps the site fresh. Videos are uploaded as **Actions artifacts** for
+   you (or a future API step) to post to YouTube Shorts / Instagram / Facebook.
 
-## Making the money real (do these when you're ready)
+## Scaling honestly (why we DON'T self-replicate)
 
-The agent already produces publishable content. To close the revenue loop:
+You may be tempted to spawn 100 agents that each create cloud accounts and host
+themselves. **Don't** — and this system won't:
 
-- **Affiliate:** apply to Amazon Associates / an affiliate network, set
-  `AFFILIATE_TAG`, and have `publish.py` insert real tagged links.
-- **Display ads:** once you have traffic, apply to Google AdSense / Ezoic and
-  drop their snippet into a `docs/_config.yml` theme.
-- **Tips:** add a Ko-fi/Buy-Me-a-Coffee button (instant, no traffic needed).
-- **Feed real earnings** into `ingest_revenue()` in `main.py` (from the
-  affiliate/ads report API or a webhook) so the ledger reflects reality.
+- Automated signup + multi-accounting to farm free tiers violates every
+  provider's ToS and is treated as fraud. It gets **all linked accounts banned**
+  — including the Amazon Associates and Google/GitHub accounts this whole thing
+  runs on. A banned account is a dead, unpaid agent.
+- Duplicate content across many hosts triggers SEO penalties, not more traffic.
 
-When `total_revenue > total_cost`, the agent is genuinely self-funding.
+The **legitimate** way to get the same throughput is already built in: the
+**research swarm** runs up to 100 *logical* agents concurrently inside the one
+environment you own (a bounded thread pool sharing the message bus), and you
+scale hosting via a single box you legitimately control.
 
-## Legal note
+## Compliance & legal
 
-The agent operates entirely under **your** accounts (GitHub, Google, affiliate
-programs). You are responsible for content quality, disclosures (affiliate/ads
-require them), and each platform's terms. Keep a human in the loop.
+Runs entirely under **your** accounts. Amazon affiliate links must live on your
+**site** (not pasted into social captions); social drives traffic to the site.
+FTC/Amazon disclosures are auto-inserted. You are responsible for content
+quality and each platform's terms.

@@ -1,0 +1,87 @@
+{
+  "source": "swarm",
+  "workers": 15,
+  "candidates": 60,
+  "products": [
+    {
+      "product": "Himalaya Herbals Neem Face Wash",
+      "search_query": "Himalaya neem face wash best seller",
+      "category": "face & skin care",
+      "heat": 9,
+      "commission": 0.09,
+      "opportunity": 81.0
+    },
+    {
+      "product": "Maybelline New York Fit Me Matte + Poreless Foundation",
+      "search_query": "Maybelline Fit Me Foundation",
+      "category": "makeup & beauty",
+      "heat": 9,
+      "commission": 0.09,
+      "opportunity": 81.0
+    },
+    {
+      "product": "Philips Norelco Multigroom Series 7000",
+      "search_query": "Philips Norelco Multigroom Series 7000",
+      "category": "men's grooming",
+      "heat": 9,
+      "commission": 0.09,
+      "opportunity": 81.0
+    },
+    {
+      "product": "Pigeon 1600W Electric Kettle 1.5 Litre",
+      "search_query": "Pigeon electric kettle 1.5 litre 1600W",
+      "category": "kitchen & cookware",
+      "heat": 10,
+      "commission": 0.08,
+      "opportunity": 80.0
+    },
+    {
+      "product": "Garnier Skin Naturals Light Complete Serum",
+      "search_query": "Garnier Vitamin C serum best seller",
+      "category": "face & skin care",
+      "heat": 8,
+      "commission": 0.09,
+      "opportunity": 72.0
+    },
+    {
+      "product": "Plum Green Tea Renewed Clarity Night Gel",
+      "search_query": "Plum green tea night gel best seller",
+      "category": "face & skin care",
+      "heat": 8,
+      "commission": 0.09,
+      "opportunity": 72.0
+    },
+    {
+      "product": "Swiss Beauty Ultimate Shadow Palette 12+1 Colors",
+      "search_query": "Swiss Beauty eyeshadow palette",
+      "category": "makeup & beauty",
+      "heat": 8,
+      "commission": 0.09,
+      "opportunity": 72.0
+    },
+    {
+      "product": "MARS Cosmetics Mini Lip Gloss Set 6 Pcs",
+      "search_query": "Mars lip gloss set",
+      "category": "makeup & beauty",
+      "heat": 8,
+      "commission": 0.09,
+      "opportunity": 72.0
+    },
+    {
+      "product": "Prestige Omega Deluxe Aluminium Pressure Cooker 5 Litre",
+      "search_query": "Prestige Omega Deluxe pressure cooker 5 litre",
+      "category": "kitchen & cookware",
+      "heat": 9,
+      "commission": 0.08,
+      "opportunity": 72.0
+    },
+    {
+      "product": "Inalsa Crisp Pro Air Fryer 4.5 Litre",
+      "search_query": "Inalsa Crisp Pro air fryer 4.5 litre",
+      "category": "kitchen & cookware",
+      "heat": 9,
+      "commission": 0.08,
+      "opportunity": 72.0
+    }
+  ]
+}

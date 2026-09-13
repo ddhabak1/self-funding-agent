@@ -1,0 +1,68 @@
+[
+  {
+    "id": "923563ab26af",
+    "product": "Minimalist 10% Vitamin C Face Serum",
+    "category": "beauty",
+    "style": "shock_stat",
+    "opportunity": 81.0,
+    "post": "2026-09-13-minimalist-10-vitamin-c-face-serum-shockstat.md",
+    "video": null,
+    "created": "2026-09-13T17:05:18.489261+00:00",
+    "logged": "2026-09-13T17:05:18.490785+00:00"
+  },
+  {
+    "id": "3fcbd56fbe23",
+    "product": "Mamaearth Onion Hair Fall Shampoo",
+    "category": "beauty",
+    "style": "secret_reveal",
+    "opportunity": 81.0,
+    "post": "2026-09-13-mamaearth-onion-hair-fall-shampoo-secretreveal.md",
+    "video": null,
+    "created": "2026-09-13T17:05:45.900948+00:00",
+    "logged": "2026-09-13T17:05:45.901590+00:00"
+  },
+  {
+    "id": "088fee21ba6f",
+    "product": "Dot & Key 72H Hydrating Hyaluronic Acid Gel",
+    "category": "beauty",
+    "style": "question_hook",
+    "opportunity": 72.0,
+    "post": "2026-09-13-dot-key-72h-hydrating-hyaluronic-acid-gel-questionhook.md",
+    "video": null,
+    "created": "2026-09-13T17:06:45.920254+00:00",
+    "logged": "2026-09-13T17:06:45.921182+00:00"
+  },
+  {
+    "id": "a3fc5a6f96ac",
+    "product": "CeraVe Moisturising Cream",
+    "category": "beauty",
+    "style": "shock_stat",
+    "opportunity": 72.0,
+    "post": "2026-09-13-cerave-moisturising-cream-shockstat.md",
+    "video": null,
+    "created": "2026-09-13T17:08:05.362681+00:00",
+    "logged": "2026-09-13T17:08:05.363419+00:00"
+  },
+  {
+    "id": "8fd28f94d239",
+    "product": "Vitamin C face serum",
+    "category": "beauty",
+    "style": "secret_reveal",
+    "opportunity": 81.0,
+    "post": "2026-09-13-vitamin-c-face-serum-secretreveal.md",
+    "video": "media/2026-09-13-vitamin-c-face-serum-secretreveal/short.mp4",
+    "created": "2026-09-13T17:13:31.330314+00:00",
+    "logged": "2026-09-13T17:15:05.376905+00:00"
+  },
+  {
+    "id": "9f28ca0ec528",
+    "product": "Beard trimmer kit",
+    "category": "grooming",
+    "style": "secret_reveal",
+    "opportunity": 72.0,
+    "post": "2026-09-13-beard-trimmer-kit-secretreveal.md",
+    "video": "media/2026-09-13-beard-trimmer-kit-secretreveal/short.mp4",
+    "created": "2026-09-13T17:15:05.380192+00:00",
+    "logged": "2026-09-13T17:16:42.031964+00:00"
+  }
+]
