@@ -1,0 +1,23 @@
+# Fly.io deployment (has a small always-free allowance; card required).
+#   fly launch --no-deploy      # or use this file directly
+#   fly secrets set GH_PAT=... AFFILIATE_TAG=dipankarsstor-21 GEMINI_API_KEY=...
+#   fly deploy
+# Note: Fly free VMs are small — keep MAKE_VIDEO modest or NIGHT_MAX_ASSETS low.
+app = "self-funding-agent"
+primary_region = "bom"          # Mumbai, close to amazon.in traffic
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  MODE = "night"
+  NIGHT_HOURS = "6"
+  AUTO_PUSH = "1"
+  NIGHT_MAX_ASSETS = "4"
+  OMNIROUTE_URL = "http://localhost:20128/v1"
+  OMNIROUTE_MODEL = "auto"
+
+# No public services — this is a background worker, not a web server.
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1gb"

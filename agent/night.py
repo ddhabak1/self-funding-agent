@@ -16,7 +16,7 @@ import os
 import time
 from datetime import datetime, timezone
 
-from . import bus, config, ledger, optimize, reflect, scout, selfheal
+from . import bus, config, gitsync, ledger, optimize, reflect, scout, selfheal
 from .brain import Brain
 from .factory import make_asset
 
@@ -115,6 +115,8 @@ def run_night():
     for m in bus.recent(6):
         print(f"   {m['sender']} -> {m['topic']}")
     print("Ledger:", ledger.summary())
+    # 5) publish from non-CI hosts (VM/container) when AUTO_PUSH=1
+    gitsync.push_if_enabled(note=f"{produced} assets, gen {strat['generation']}")
     print("=== NIGHT RUN COMPLETE ===")
     return 0
 

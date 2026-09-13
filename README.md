@@ -157,6 +157,19 @@ MODE=night NIGHT_HOURS=8 python -m agent.main
    cron keeps the site fresh. Videos are uploaded as **Actions artifacts** for
    you (or a future API step) to post to YouTube Shorts / Instagram / Facebook.
 
+## Where to deploy (24×7)
+
+**You already have a live $0 deployment: GitHub Actions.** Because the repo is
+public, Actions minutes are **unlimited and free**, and the included crons run
+the whole scout→swarm→video→self-tune→self-heal pipeline nightly + every 6h.
+Nothing to sign up for.
+
+For a *truly continuous* machine (not scheduled batches), the best free-forever
+box is an **Oracle Cloud Always Free ARM VM** — run the watchdog under systemd
+and it never stops. A `Dockerfile` + `docker-compose.yml` + `fly.toml` +
+systemd unit are all included, and `AUTO_PUSH=1` lets a self-hosted box publish
+to Pages itself. **Full step-by-step for every option: [`deploy/DEPLOY.md`](deploy/DEPLOY.md).**
+
 ## Scaling honestly (why we DON'T self-replicate)
 
 You may be tempted to spawn 100 agents that each create cloud accounts and host

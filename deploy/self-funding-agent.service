@@ -1,0 +1,28 @@
+# Self-Funding Agent — systemd unit for a bare Linux VM (e.g. Oracle Cloud
+# Always Free ARM). Runs the self-restarting watchdog 24x7 under your user.
+#
+# Install:
+#   sudo cp deploy/self-funding-agent.service /etc/systemd/system/
+#   # edit User=, WorkingDirectory=, EnvironmentFile= below to match your host
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now self-funding-agent
+#   journalctl -u self-funding-agent -f      # watch it work
+[Unit]
+Description=Self-Funding Autonomous Agent (24x7)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/self-funding-agent
+EnvironmentFile=/home/ubuntu/self-funding-agent/.env
+# venv python; adjust if you use system python or a different path.
+ExecStart=/home/ubuntu/self-funding-agent/.venv/bin/python -m agent.watchdog
+Restart=always
+RestartSec=15
+# Give heavy video renders room; tune to your box.
+Nice=5
+
+[Install]
+WantedBy=multi-user.target

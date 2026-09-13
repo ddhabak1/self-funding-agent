@@ -1,0 +1,22 @@
+# One-command 24x7 deployment on any Docker host (VPS, Oracle Always Free, etc.)
+#   1) copy .env.example -> .env and fill AFFILIATE_TAG, GH_PAT, etc.
+#   2) docker compose up -d --build
+#   3) docker compose logs -f
+services:
+  agent:
+    build: .
+    image: self-funding-agent:latest
+    container_name: self-funding-agent
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MODE: night
+      NIGHT_HOURS: "8"
+      AUTO_PUSH: "1"
+    volumes:
+      # Persist learned strategy, lessons, ledger and the generated site so
+      # progress survives container restarts.
+      - ./state:/app/state
+      - ./docs:/app/docs
+      - ./media:/app/media
