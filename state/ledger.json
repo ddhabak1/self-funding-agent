@@ -108,6 +108,12 @@
       "kind": "cost",
       "amount": -0.0,
       "note": "cycle: i-didnt-mop-my-floors-for-30-days-robot-vacuum-test"
+    },
+    {
+      "ts": "2026-09-14T19:52:37.326674+00:00",
+      "kind": "cost",
+      "amount": -0.0,
+      "note": "cycle: 14-days-outfits-unbreakable-carry-on-luggage-test"
     }
   ]
 }
