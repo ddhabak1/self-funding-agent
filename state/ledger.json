@@ -114,6 +114,12 @@
       "kind": "cost",
       "amount": -0.0,
       "note": "cycle: 14-days-outfits-unbreakable-carry-on-luggage-test"
+    },
+    {
+      "ts": "2026-09-14T23:57:15.072646+00:00",
+      "kind": "cost",
+      "amount": -0.0,
+      "note": "cycle: bestsmartwatches2026"
     }
   ]
 }

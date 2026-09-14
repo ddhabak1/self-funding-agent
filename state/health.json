@@ -1,5 +1,5 @@
 {
-  "ts": "2026-09-14T19:50:26.104250+00:00",
+  "ts": "2026-09-14T23:49:40.715329+00:00",
   "healthy": true,
   "checks": {
     "llm": {
@@ -14,13 +14,13 @@
       "circuit_open": false
     },
     "disk": {
-      "free_gb": 83.2,
+      "free_gb": 83.21,
       "ok": true
     },
     "site": {
       "docs_exists": true,
       "index_exists": true,
-      "posts": 25,
+      "posts": 26,
       "ok": true
     },
     "incidents_24h": {}
