@@ -3,8 +3,10 @@
 No human in the loop. Each night it:
   1. SCOUTS the top-10 best-selling / high-commission products.
   2. Runs the FACTORY across those products, cycling bandit-chosen viral
-     styles, generating + enhancing HD promo videos with affiliate landing
-     pages, over and over until the night's time budget is spent.
+     styles, generating HD promo videos + marketing images whose CTA points
+     straight at the affiliate link (no text article, no on-site publish —
+     see agent/factory.py's make_marketing_asset), over and over until the
+     night's time budget is spent.
   3. Periodically SELF-TUNES (optimizer.evolve) so it learns and grows.
   4. Records accounting and halts only if insolvent.
 
@@ -24,10 +26,10 @@ import os
 import time
 from datetime import datetime, timezone
 
-from . import (bus, config, distribute, gitsync, ledger, optimize, reach,
-               reflect, scout, selfheal)
+from . import bus, config, distribute, gitsync, ledger, optimize, reach, \
+    reflect, scout, selfheal
 from .brain import Brain
-from .factory import make_asset
+from .factory import make_marketing_asset
 
 
 def _backend_label(brain):
@@ -101,11 +103,12 @@ def run_night():
         product = products[idx % len(products)]
         style, _ = optimize.pick_style(strat)
         try:
-            res = make_asset(brain, product, style=style)
+            res = make_marketing_asset(brain, product, style=style)
             produced += 1
+            kind = "+video" if res.get("video") else (
+                "+image" if res.get("image") else "skipped")
             print(f"[factory] {produced}/{max_assets} "
-                  f"{'+video' if res.get('video') else 'post'} "
-                  f"[{style}] {res['product']}")
+                  f"{kind} [{style}] {res['product']}")
             # 2b) SHARE it on the public internet + queue platform packs
             try:
                 dist = distribute.distribute(brain, res, product)
@@ -127,13 +130,6 @@ def run_night():
         if pace > 0 and produced < max_assets and not (
                 deadline and time.time() + pace > deadline):
             time.sleep(pace)
-
-    # 2c) refresh organic-discovery feeds so search engines surface it 24x7
-    try:
-        n = distribute.build_feed_and_sitemap()
-        print(f"[share] rebuilt RSS + sitemap ({n} posts)")
-    except Exception as e:
-        selfheal.record_incident("feeds", e)
 
     # 3) final nightly self-fine-tune, then reflect into durable lessons
     strat = optimize.evolve()

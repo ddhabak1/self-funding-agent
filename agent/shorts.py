@@ -66,8 +66,8 @@ def read_post(path):
 
 
 # --- scripting (Research/Content agent output) -----------------------------
-def make_script(brain, title, body):
-    site = f"{config.SITE_URL}{config.SITE_BASEURL}/"
+def make_script(brain, title, body, buy_url=None):
+    site = buy_url or f"{config.SITE_URL}{config.SITE_BASEURL}/"
     prompt = f"""You are a viral short-form video scriptwriter. Turn this article
 into a punchy 25-38 second vertical SHORT that maximizes retention.
 Title: "{title}"
@@ -81,7 +81,7 @@ Return strict JSON:
  "lines": ["6-8 spoken lines"],
  "cta": "one line: check the link in the description",
  "yt_title": "<=90 char title with a hook",
- "yt_description": "2-3 lines; include full guide link {site}; note some links may be affiliate",
+ "yt_description": "2-3 lines; include the buy link {site}; note some links may be affiliate",
  "hashtags": ["8-10 hashtags without # symbol"]
 }}"""
     data = brain.think(prompt, as_json=True)
@@ -93,7 +93,7 @@ Return strict JSON:
                       "But there's a catch most people miss."],
             "cta": "Full guide and top picks in the description.",
             "yt_title": title[:90],
-            "yt_description": f"Full guide: {site}\nSome links may be affiliate.",
+            "yt_description": f"Buy here: {site}\nSome links may be affiliate.",
             "hashtags": ["tech", "gadgets", "shorts", "techtok"],
         }
     return data
@@ -268,6 +268,21 @@ def _render_frames(groups, total, frames_dir):
 
 
 # --- assembly --------------------------------------------------------------
+def make_thumbnail(script, slug):
+    """Render one static hook frame as a standalone marketing image (for
+    Instagram/Pinterest posts, or as a video thumbnail) — reuses the exact
+    same drawing primitives as the video so it looks consistent."""
+    outdir = MEDIA_DIR / slug
+    outdir.mkdir(parents=True, exist_ok=True)
+    words = script.get("hook", "").split() or ["New", "find"]
+    im = _bg_frame(0.6, 3.0)   # a lively mid-animation background frame
+    im = _apply_vignette(im)
+    _draw_caption(im, words, len(words) - 1, 1.0, True)
+    out = outdir / "thumbnail.jpg"
+    im.convert("RGB").save(out, quality=90)
+    return out
+
+
 def build_from_script(script, slug):
     outdir = MEDIA_DIR / slug
     outdir.mkdir(parents=True, exist_ok=True)

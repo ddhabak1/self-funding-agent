@@ -51,7 +51,7 @@ from datetime import datetime, timezone
 from urllib.parse import parse_qs, quote_plus, urlencode
 
 from . import bus, config, distribute, optimize, scout, selfheal
-from .factory import make_asset
+from .factory import make_marketing_asset
 
 _LINKS_PATH = config.STATE_DIR / "manual_links.json"
 _PUBLISH_PATH = config.STATE_DIR / "manual_publish.json"
@@ -495,7 +495,8 @@ def _run_publish_jobs(queued):
         _save_json(_PUBLISH_PATH, pub)
         try:
             style, _directive = optimize.pick_style()
-            res = make_asset(brain, product, style=style, affiliate_link=link)
+            res = make_marketing_asset(brain, product, style=style,
+                                       affiliate_link=link)
             try:
                 dist = distribute.distribute(brain, res, product)
             except Exception as e:
@@ -504,7 +505,8 @@ def _run_publish_jobs(queued):
             pub = _load_json(_PUBLISH_PATH, {})
             pub[pid] = {
                 "status": "done", "product": product["product"],
-                "post": res.get("post"), "video": res.get("video"),
+                "video": res.get("video"), "image": res.get("image"),
+                "buy_url": res.get("buy_url"),
                 "landing_url": dist.get("landing_url"),
                 "finished": datetime.now(timezone.utc).isoformat(),
             }
@@ -517,10 +519,6 @@ def _run_publish_jobs(queued):
             pub[pid] = {"status": "error", "product": product["product"],
                        "error": str(e)[:200]}
             _save_json(_PUBLISH_PATH, pub)
-    try:
-        distribute.build_feed_and_sitemap()
-    except Exception as e:
-        selfheal.record_incident("admin_publish_feeds", e)
 
 
 # --- router -------------------------------------------------------------

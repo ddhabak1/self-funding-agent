@@ -137,7 +137,79 @@ def make_asset(brain, product, style=None, affiliate_link=None):
     return result
 
 
-# --- helpers ---------------------------------------------------------------
+def make_marketing_asset(brain, product, style=None, affiliate_link=None):
+    """Produce a video + marketing image for one product — NO text article,
+    NO on-site publish. The video/image CTA points straight at the given (or
+    auto-generated) affiliate link, since Amazon Associates lets links live in
+    a video/description or your own approved property, not only a website.
+    """
+    prod = product["product"] if isinstance(product, dict) else str(product)
+    category = product.get("category", "") if isinstance(product, dict) else ""
+    search_q = product.get("search_query", prod) if isinstance(product, dict) \
+        else prod
+    opportunity = product.get("opportunity", 0) if isinstance(product, dict) \
+        else 0
+
+    if style is None:
+        style, directive = optimize.pick_style()
+    else:
+        directive = optimize.HOOK_STYLES.get(style, "")
+
+    title = _title_for(prod, style)
+    buy_url = affiliate_link or search_link(search_q)
+    # Short descriptive source text for the video script (never published).
+    body = _landing_post(brain, prod, directive)
+    slug = _slug(prod, style)
+
+    asset_id = _asset_id(prod, style)
+    result = {
+        "id": asset_id, "product": prod, "category": category,
+        "style": style, "opportunity": opportunity,
+        "video": None, "image": None, "buy_url": buy_url,
+        "manual_link": bool(affiliate_link),
+        "created": datetime.now(timezone.utc).isoformat(),
+    }
+
+    try:
+        from .shorts import make_script, make_thumbnail, build_from_script
+        script = make_script(brain, title, body, buy_url=buy_url)
+        _apply_style(script, directive)
+
+        thumb = make_thumbnail(script, slug)
+        result["image"] = str(thumb.relative_to(config.ROOT))
+        bus.post(NAME, "image_ready", {"product": prod, "file": thumb.name})
+
+        if os.environ.get("FACTORY_NO_VIDEO") == "1":
+            bus.post(NAME, "video_skipped", {"product": prod, "err": "disabled"})
+        else:
+            mp4 = build_from_script(script, slug)
+            result["video"] = str(mp4.relative_to(config.ROOT))
+            bus.post(NAME, "video_ready",
+                     {"product": prod, "style": style, "file": mp4.name})
+            try:
+                from .videobrief import emit_brief
+                brief = emit_brief(
+                    slug=slug, title=title, product=prod,
+                    category=category, style=style, style_directive=directive,
+                    script=script, landing_url=buy_url,
+                    search_url=buy_url)
+                if brief:
+                    result["video_brief"] = str(brief.relative_to(config.ROOT))
+                    bus.post(NAME, "video_brief_queued",
+                             {"product": prod, "brief": brief.name})
+            except Exception as e:
+                bus.post(NAME, "video_brief_skipped", {"err": str(e)[:120]})
+    except Exception as e:
+        bus.post(NAME, "asset_skipped", {"product": prod, "err": str(e)[:120]})
+
+    optimize.log_asset(result)
+    bus.post(NAME, "asset_built",
+             {"product": prod, "style": style,
+              "video": bool(result["video"]), "image": bool(result["image"])})
+    return result
+
+
+
 def _apply_style(script, directive):
     """Nudge the video script toward the chosen viral hook style."""
     if directive and isinstance(script, dict):

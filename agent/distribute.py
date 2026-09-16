@@ -69,12 +69,14 @@ def _fallback_caption(title, product, url, angle):
 
 
 def content_pack(brain, asset, product):
-    """Build per-channel share copy. Funnels to the landing page (compliant)."""
-    slug = asset.get("post", "").replace(".md", "")
+    """Build per-channel share copy. Funnels to the asset's real destination:
+    the operator's affiliate link (buy_url) for video/image-only assets, or
+    the on-site landing page for legacy text assets that still have one."""
+    slug = asset.get("post", "").replace(".md", "") or asset.get("id", "")
     prod = asset.get("product", product if isinstance(product, str) else "")
     category = asset.get("category", "")
     title = asset.get("title") or prod
-    url = landing_url(slug)
+    url = asset.get("buy_url") or landing_url(slug)
     angle = reach.angle_for(category)
 
     caption = None
