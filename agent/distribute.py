@@ -7,21 +7,30 @@ pushes it out across the public internet, three ways:
   1. Content packs — per-channel title/caption/hashtags/hook engineered for
      click-through, funneling to the on-site landing page (compliant: no raw
      affiliate links in social captions, FTC #ad disclosure included).
-  2. Auto-post — best-effort publishing to channels with FREE, key-optional
-     APIs that ARE public: Telegram channel, Discord webhook, generic webhook
+  2. Auto-post — fully autonomous publishing (no human per post) to channels
+     with official, key-based APIs once the operator has created the real
+     account + credentials ONCE: Telegram bot, Discord webhook, X/Twitter API
+     v2 (OAuth 1.0a), Reddit API (OAuth2 script app), or a generic webhook
      (Zapier/IFTTT/Make -> Instagram/YouTube/Facebook). No-ops safely without
      credentials, so nothing breaks when tokens aren't set.
   3. Organic discovery — a real RSS feed + sitemap.xml + robots.txt on the
      site so Google/Bing and feed readers surface the content for free, 24x7.
 
-Everything queued to state/distribution/ so a human or a token-holding poster
-can fan it out to the platforms that need OAuth (Instagram/YouTube/Facebook).
+Instagram/YouTube/Facebook need Meta/Google Business accounts + app review
+before their APIs allow posting, so those stay queued to state/distribution/
+for a human (or the generic webhook) to fan out until that's set up.
 """
+import base64
+import hashlib
+import hmac
 import json
 import os
 import re
+import secrets
+import time
 import urllib.request
 from datetime import datetime, timezone
+from urllib.parse import quote, urlencode
 from xml.sax.saxutils import escape
 
 from . import bus, config, reach
@@ -137,6 +146,85 @@ def _post_json(url, payload, headers=None):
         return r.status
 
 
+def _oauth1_header(method, url, consumer_key, consumer_secret,
+                   token, token_secret):
+    """Twitter API v2 OAuth 1.0a Authorization header (stdlib only, no
+    third-party OAuth library needed)."""
+    def enc(s):
+        return quote(str(s), safe="~")
+    oauth_params = {
+        "oauth_consumer_key": consumer_key,
+        "oauth_nonce": secrets.token_hex(16),
+        "oauth_signature_method": "HMAC-SHA1",
+        "oauth_timestamp": str(int(time.time())),
+        "oauth_token": token,
+        "oauth_version": "1.0",
+    }
+    param_str = "&".join(f"{enc(k)}={enc(v)}"
+                         for k, v in sorted(oauth_params.items()))
+    base = "&".join([method.upper(), enc(url), enc(param_str)])
+    signing_key = f"{enc(consumer_secret)}&{enc(token_secret)}"
+    sig = base64.b64encode(
+        hmac.new(signing_key.encode(), base.encode(), hashlib.sha1).digest()
+    ).decode()
+    oauth_params["oauth_signature"] = sig
+    return "OAuth " + ", ".join(
+        f'{enc(k)}="{enc(v)}"' for k, v in sorted(oauth_params.items()))
+
+
+def _post_tweet(text):
+    """Post to X/Twitter via the official API v2 (requires the operator's
+    own developer app + user-context tokens — no bot signup involved)."""
+    url = "https://api.twitter.com/2/tweets"
+    header = _oauth1_header(
+        "POST", url, config.TWITTER_API_KEY, config.TWITTER_API_SECRET,
+        config.TWITTER_ACCESS_TOKEN, config.TWITTER_ACCESS_SECRET)
+    body = json.dumps({"text": text[:280]}).encode()
+    req = urllib.request.Request(
+        url, data=body, method="POST",
+        headers={"Authorization": header, "Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=15) as r:
+        return r.status
+
+
+def _reddit_token():
+    """Reddit's official script-app OAuth2 password grant (the operator's
+    own account + their own registered script app)."""
+    auth = base64.b64encode(
+        f"{config.REDDIT_CLIENT_ID}:{config.REDDIT_CLIENT_SECRET}".encode()
+    ).decode()
+    body = urlencode({
+        "grant_type": "password",
+        "username": config.REDDIT_USERNAME,
+        "password": config.REDDIT_PASSWORD,
+    }).encode()
+    req = urllib.request.Request(
+        "https://www.reddit.com/api/v1/access_token", data=body, method="POST",
+        headers={"Authorization": f"Basic {auth}",
+                 "User-Agent": config.REDDIT_USER_AGENT,
+                 "Content-Type": "application/x-www-form-urlencoded"})
+    with urllib.request.urlopen(req, timeout=15) as r:
+        return json.loads(r.read().decode())["access_token"]
+
+
+def _post_reddit(title, body_text):
+    token = _reddit_token()
+    data = urlencode({
+        "sr": config.REDDIT_SUBREDDIT,
+        "kind": "self",
+        "title": title[:300],
+        "text": body_text,
+        "api_type": "json",
+    }).encode()
+    req = urllib.request.Request(
+        "https://oauth.reddit.com/api/submit", data=data, method="POST",
+        headers={"Authorization": f"Bearer {token}",
+                 "User-Agent": config.REDDIT_USER_AGENT,
+                 "Content-Type": "application/x-www-form-urlencoded"})
+    with urllib.request.urlopen(req, timeout=15) as r:
+        return json.loads(r.read().decode())
+
+
 def auto_post(pack):
     """Publish to public channels that expose FREE APIs when a token is set."""
     posted = []
@@ -174,6 +262,28 @@ def auto_post(pack):
             posted.append("webhook")
         except Exception as e:
             bus.post(NAME, "post_failed", {"channel": "webhook", "err": str(e)[:100]})
+
+    # X / Twitter — official API v2, OAuth 1.0a user-context (free tier).
+    if (config.TWITTER_API_KEY and config.TWITTER_API_SECRET
+            and config.TWITTER_ACCESS_TOKEN and config.TWITTER_ACCESS_SECRET):
+        try:
+            _post_tweet(pack["channels"]["x_twitter"]["text"])
+            posted.append("x_twitter")
+        except Exception as e:
+            bus.post(NAME, "post_failed", {"channel": "x_twitter", "err": str(e)[:100]})
+
+    # Reddit — official OAuth2 script-app flow; value-first honest write-up
+    # (spammy self-promotion gets a subreddit removed/banned fast, so this
+    # reuses the same "my honest breakdown" framing already in content_pack).
+    if (config.REDDIT_CLIENT_ID and config.REDDIT_CLIENT_SECRET
+            and config.REDDIT_USERNAME and config.REDDIT_PASSWORD
+            and config.REDDIT_SUBREDDIT):
+        try:
+            r = pack["channels"]["reddit"]
+            _post_reddit(r["title"], r["body"])
+            posted.append("reddit")
+        except Exception as e:
+            bus.post(NAME, "post_failed", {"channel": "reddit", "err": str(e)[:100]})
 
     return posted
 

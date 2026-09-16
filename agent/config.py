@@ -104,3 +104,29 @@ ADMIN_ALLOWED_EMAIL = os.environ.get("ADMIN_ALLOWED_EMAIL", "")
 # persisted to state/.session_secret so logins survive process restarts.
 SESSION_SECRET = os.environ.get("SESSION_SECRET", "")
 
+# --- Autonomous social auto-posting (agent/distribute.py) -------------------
+# Real accounts + official APIs, created ONCE by a human (required — no
+# platform allows bot signups), then the agent posts on its own forever with
+# zero further human input. Every block below no-ops safely when unset.
+#
+# X / Twitter — developer.twitter.com -> create a Project + App (free tier)
+# -> Keys and tokens -> generate all four below (User authentication must be
+# on, permissions = Read and Write).
+TWITTER_API_KEY = os.environ.get("TWITTER_API_KEY", "")
+TWITTER_API_SECRET = os.environ.get("TWITTER_API_SECRET", "")
+TWITTER_ACCESS_TOKEN = os.environ.get("TWITTER_ACCESS_TOKEN", "")
+TWITTER_ACCESS_SECRET = os.environ.get("TWITTER_ACCESS_SECRET", "")
+
+# Reddit — reddit.com/prefs/apps -> create app, type "script" -> gives you
+# the client id (under the app name) + secret. Uses your normal Reddit
+# login (username/password) via Reddit's official OAuth2 script-app flow.
+REDDIT_CLIENT_ID = os.environ.get("REDDIT_CLIENT_ID", "")
+REDDIT_CLIENT_SECRET = os.environ.get("REDDIT_CLIENT_SECRET", "")
+REDDIT_USERNAME = os.environ.get("REDDIT_USERNAME", "")
+REDDIT_PASSWORD = os.environ.get("REDDIT_PASSWORD", "")
+# Subreddit to post value-first write-ups to (pick one that allows it).
+REDDIT_SUBREDDIT = os.environ.get("REDDIT_SUBREDDIT", "")
+REDDIT_USER_AGENT = os.environ.get(
+    "REDDIT_USER_AGENT", "self-funding-agent/1.0 (by u/" +
+    os.environ.get("REDDIT_USERNAME", "operator") + ")")
+
