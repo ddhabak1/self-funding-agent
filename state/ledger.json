@@ -156,6 +156,12 @@
       "kind": "cost",
       "amount": -0.0,
       "note": "cycle: 199-wireless-anc-headphones-subway-noise-test-review"
+    },
+    {
+      "ts": "2026-09-16T16:41:04.736539+00:00",
+      "kind": "cost",
+      "amount": -0.0,
+      "note": "cycle: bestair-fryers-smart-kitchen-appliances2026"
     }
   ]
 }
