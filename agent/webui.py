@@ -180,7 +180,9 @@ def _configured():
     return bool(config.GOOGLE_CLIENT_ID and config.GOOGLE_CLIENT_SECRET)
 
 
-def _not_configured_html():
+def _not_configured_html(origin=""):
+    redirect_uri = f"{origin}/admin/oauth/callback" if origin \
+        else "https://<your-host>/admin/oauth/callback"
     return _page_html(
         "<h2>Admin UI setup required</h2>"
         "<p>Google sign-in isn't configured yet. In your own Google Cloud "
@@ -190,7 +192,7 @@ def _not_configured_html():
         "a test user.</li>"
         "<li>Credentials → Create Credentials → OAuth client ID → Web "
         "application.<br>Authorized redirect URI: "
-        f"<code>{{origin}}/admin/oauth/callback</code></li>"
+        f"<code>{html.escape(redirect_uri)}</code></li>"
         "<li>Set env vars <code>GOOGLE_CLIENT_ID</code>, "
         "<code>GOOGLE_CLIENT_SECRET</code>, <code>ADMIN_ALLOWED_EMAIL</code> "
         "(your Google account) on the host, then restart.</li>"
@@ -199,7 +201,7 @@ def _not_configured_html():
 
 def _login(handler):
     if not _configured():
-        _send_html(handler, 200, _not_configured_html())
+        _send_html(handler, 200, _not_configured_html(_origin(handler)))
         return
     state = secrets.token_urlsafe(24)
     redirect_uri = _origin(handler) + "/admin/oauth/callback"
@@ -222,7 +224,7 @@ def _login(handler):
 
 def _oauth_callback(handler, query):
     if not _configured():
-        _send_html(handler, 200, _not_configured_html())
+        _send_html(handler, 200, _not_configured_html(_origin(handler)))
         return
     code = (query.get("code") or [None])[0]
     state = (query.get("state") or [None])[0]
@@ -341,7 +343,7 @@ def _dashboard(handler):
         _redirect(handler, "/admin/login")
         return
     if not _configured():
-        _send_html(handler, 200, _not_configured_html())
+        _send_html(handler, 200, _not_configured_html(_origin(handler)))
         return
     products = _today_products()
     links = _load_json(_LINKS_PATH, {})
