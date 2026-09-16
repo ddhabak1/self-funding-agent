@@ -1,0 +1,29 @@
+name: render-keepalive
+
+# Render's free web-service plan spins the instance down after ~15 min with no
+# inbound traffic, which would pause the agent's autorun loop (agent/server.py).
+# This ping keeps the deployed 24x7 worker (https://self-funding-agent.onrender.com)
+# awake for free, using GitHub Actions' unlimited minutes on this public repo
+# instead of paying for an "always-on" plan or a third-party uptime service.
+on:
+  schedule:
+    - cron: "*/10 * * * *"   # every 10 minutes (< Render's 15-min idle timeout)
+  workflow_dispatch:
+
+concurrency:
+  group: render-keepalive
+  cancel-in-progress: true
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping /health
+        run: |
+          code=$(curl -s -o /tmp/health.json -w "%{http_code}" \
+            --max-time 20 https://self-funding-agent.onrender.com/health || echo 000)
+          echo "status=$code"
+          cat /tmp/health.json 2>/dev/null || true
+          if [ "$code" != "200" ] && [ "$code" != "503" ]; then
+            echo "::warning::Render service did not respond as expected (HTTP $code)"
+          fi
