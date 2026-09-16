@@ -72,11 +72,29 @@ def _run_async(mode):
 
 
 def _autorun_loop():
-    """Background 24x7 worker: keep running the night loop with a short rest."""
+    """Background 24x7 worker: keep running the night loop with a short rest.
+
+    Also keeps the free/keyless OmniRoute router alive on this instance —
+    without it, every call falls straight through to the Gemini SDK, which
+    has a tiny daily quota (config.DAILY_CALL_BUDGET) and 429s within minutes
+    of continuous use, silently degrading a 24x7 run to templated offline
+    fallback content for the rest of the day.
+    """
     mode = os.environ.get("SERVER_RUN_MODE", "night")
     rest = int(os.environ.get("SERVER_REST_SECONDS", "300"))
+    # Continuous hosts should grind, not do tiny CI-sized batches — default
+    # these up (still overridable via env) so the agent behaves as a true
+    # 24x7 worker out of the box, matching agent/watchdog.py's defaults.
+    os.environ.setdefault("NIGHT_HOURS", "0")
+    os.environ.setdefault("NIGHT_MAX_ASSETS", "48")
+    os.environ.setdefault("NIGHT_PACE_SECONDS", "180")
     time.sleep(3)  # let the web server bind first
     while True:
+        try:
+            from .watchdog import ensure_omniroute
+            ensure_omniroute()
+        except Exception as e:
+            selfheal.record_incident("server_autorun_omniroute", e)
         try:
             _do_run(mode)
         except Exception as e:
@@ -133,6 +151,8 @@ code,pre{{background:#f4f4f5;padding:.15rem .35rem;border-radius:4px}}
 <pre>curl -X POST "$URL/run?mode=cycle"    # one article
 curl -X POST "$URL/run?mode=night"    # scout+swarm+videos</pre>
 <p>Endpoints: <code>/health</code> · <code>/status</code> · <code>/run</code></p>
+<p><a href="/admin">Admin panel</a> — approve products, paste your affiliate
+links, publish + market.</p>
 </body></html>"""
 
 
@@ -149,8 +169,12 @@ class _Handler(BaseHTTPRequestHandler):
         pass
 
     def do_GET(self):
-        path = urlparse(self.path).path
-        if path in ("/health", "/healthz", "/livez", "/readyz"):
+        parsed = urlparse(self.path)
+        path = parsed.path
+        if path.startswith("/admin"):
+            from . import webui
+            webui.handle(self, "GET", path, parse_qs(parsed.query))
+        elif path in ("/health", "/healthz", "/livez", "/readyz"):
             report = _health()
             self._send(200 if report.get("healthy") else 503,
                        json.dumps(report))
@@ -163,7 +187,10 @@ class _Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         parsed = urlparse(self.path)
-        if parsed.path == "/run":
+        if parsed.path.startswith("/admin"):
+            from . import webui
+            webui.handle(self, "POST", parsed.path, parse_qs(parsed.query))
+        elif parsed.path == "/run":
             mode = (parse_qs(parsed.query).get("mode", ["cycle"])[0]).lower()
             if mode not in ("cycle", "night"):
                 mode = "cycle"

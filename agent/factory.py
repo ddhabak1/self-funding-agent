@@ -55,8 +55,14 @@ Return only the Markdown body."""
     return body
 
 
-def make_asset(brain, product, style=None):
-    """Produce landing post (+video script/meta) for one product."""
+def make_asset(brain, product, style=None, affiliate_link=None):
+    """Produce landing post (+video script/meta) for one product.
+
+    affiliate_link: when the operator has pasted their own approved
+    affiliate URL for this exact product (via the admin UI), use it verbatim
+    for the primary CTA / "Where to buy" links instead of the auto-generated
+    tagged search link. Falls back to the generic search link when omitted.
+    """
     prod = product["product"] if isinstance(product, dict) else str(product)
     category = product.get("category", "") if isinstance(product, dict) else ""
     search_q = product.get("search_query", prod) if isinstance(product, dict) \
@@ -71,13 +77,14 @@ def make_asset(brain, product, style=None):
 
     title = _title_for(prod, style)
     body = _landing_post(brain, prod, directive)
+    buy_url = affiliate_link or search_link(search_q)
     # Conversion CTA up top — the first thing a reader sees drives the click.
     cta = (f"> 💡 **In a hurry?** See the current best-value **"
-           f"[{prod}]({search_link(search_q)})** deals on Amazon "
+           f"[{prod}]({buy_url})** deals on Amazon "
            f"India — updated daily.\n\n")
     body = cta + body
     body += (f"\n\n## Where to buy\n\nBrowse current best-sellers and live "
-             f"deals for **[{prod}]({search_link(search_q)})** on Amazon.\n")
+             f"deals for **[{prod}]({buy_url})** on Amazon.\n")
     body += recommend(brain, title, body)
 
     post = {"title": title, "slug": _slug(prod, style),
@@ -88,7 +95,8 @@ def make_asset(brain, product, style=None):
     result = {
         "id": asset_id, "product": prod, "category": category,
         "style": style, "opportunity": opportunity,
-        "post": path.name, "video": None,
+        "post": path.name, "video": None, "buy_url": buy_url,
+        "manual_link": bool(affiliate_link),
         "created": datetime.now(timezone.utc).isoformat(),
     }
 

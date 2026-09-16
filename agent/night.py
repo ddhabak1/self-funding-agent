@@ -9,8 +9,16 @@ No human in the loop. Each night it:
   4. Records accounting and halts only if insolvent.
 
 Deployment: GitHub Actions caps a job at ~6h, so in CI this produces a solid
-nightly BATCH (NIGHT_MAX_ASSETS). On a 24x7 machine / VPS, set NIGHT_HOURS to
-run the true all-night grind. Both paths share this same code.
+nightly BATCH (NIGHT_MAX_ASSETS). On a 24x7 machine / VPS / PaaS, set
+NIGHT_HOURS to run the true all-night grind. Both paths share this same code.
+
+24x7 pacing: on an always-on host, the outer loop (agent/server.py or
+agent/watchdog.py) simply calls run_night() again and again forever. Set
+NIGHT_PACE_SECONDS so assets are produced steadily across the whole window
+instead of bursting through NIGHT_MAX_ASSETS as fast as the LLM/renderer
+allow — this is gentler on free LLM-router rate limits and a small free-tier
+instance, and spreads output evenly around the clock. Default 0 preserves the
+original as-fast-as-possible behaviour for CI batches.
 """
 import os
 import time
@@ -36,6 +44,9 @@ def run_night():
     max_assets = int(os.environ.get("NIGHT_MAX_ASSETS", "10"))  # per run cap
     make_video = os.environ.get("MAKE_VIDEO", "1") == "1"
     top_n = int(os.environ.get("SCOUT_TOP_N", "10"))
+    # 24x7 hosts: pace production evenly instead of bursting (0 = no pacing,
+    # matches historic CI-batch behaviour).
+    pace = float(os.environ.get("NIGHT_PACE_SECONDS", "0"))
 
     deadline = time.time() + hours * 3600 if hours > 0 else None
     print(f"=== NIGHT RUN {datetime.now(timezone.utc).isoformat()} ===")
@@ -111,6 +122,11 @@ def run_night():
             strat = optimize.evolve()
             print(f"[optimize] gen {strat['generation']} "
                   f"best_style={bus.get_intel('strategy', {}).get('best')}")
+        # 24x7 pacing: spread output evenly instead of bursting through the
+        # whole budget in minutes (skip the wait once the deadline is close).
+        if pace > 0 and produced < max_assets and not (
+                deadline and time.time() + pace > deadline):
+            time.sleep(pace)
 
     # 2c) refresh organic-discovery feeds so search engines surface it 24x7
     try:

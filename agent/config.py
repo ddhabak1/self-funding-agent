@@ -83,3 +83,16 @@ SITE_TITLE = os.environ.get("SITE_TITLE", "The Self-Funding Agent")
 SITE_TAGLINE = os.environ.get(
     "SITE_TAGLINE", "An AI writing its way to paying its own bills."
 )
+
+# --- Admin UI (agent/webui.py) ---------------------------------------------
+# Human-in-the-loop control panel: shows the day's scouted top products, lets
+# the operator paste their own approved affiliate link per product, and
+# publishing kicks off content generation + marketing for exactly those.
+# Gated behind "Sign in with Google" so it's safe to expose on a public URL.
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
+GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "")
+# Only this Google account may use the admin UI (single-operator tool).
+ADMIN_ALLOWED_EMAIL = os.environ.get("ADMIN_ALLOWED_EMAIL", "")
+# Signs the admin session cookie. If unset, a random one is generated and
+# persisted to state/.session_secret so logins survive process restarts.
+SESSION_SECRET = os.environ.get("SESSION_SECRET", "")
