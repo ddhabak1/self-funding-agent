@@ -88,7 +88,14 @@ SITE_TAGLINE = os.environ.get(
 # Human-in-the-loop control panel: shows the day's scouted top products, lets
 # the operator paste their own approved affiliate link per product, and
 # publishing kicks off content generation + marketing for exactly those.
-# Gated behind "Sign in with Google" so it's safe to expose on a public URL.
+#
+# Default auth: a simple username/password form (change these via env vars —
+# the defaults are meant to be overridden before exposing this publicly).
+ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin123#")
+# Optional upgrade: gate behind "Sign in with Google" instead, restricted to
+# one account. Only used when both are set; falls back to username/password
+# above otherwise.
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "")
 # Only this Google account may use the admin UI (single-operator tool).
@@ -96,3 +103,4 @@ ADMIN_ALLOWED_EMAIL = os.environ.get("ADMIN_ALLOWED_EMAIL", "")
 # Signs the admin session cookie. If unset, a random one is generated and
 # persisted to state/.session_secret so logins survive process restarts.
 SESSION_SECRET = os.environ.get("SESSION_SECRET", "")
+

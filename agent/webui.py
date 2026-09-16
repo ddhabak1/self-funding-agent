@@ -14,24 +14,28 @@ tagged search URL). This module adds a small authenticated web UI:
                                  in a background thread (non-blocking).
   GET  /admin/status.json     -> polls publish progress for the dashboard.
   GET  /admin/refresh         -> re-scouts a fresh top-10 for today.
-  GET  /admin/login           -> "Sign in with Google" (OAuth2 redirect).
+  GET  /admin/login           -> simple username/password login form.
+  POST /admin/login           -> checks credentials, sets the session cookie.
+  GET  /admin/login/google    -> optional "Sign in with Google" (OAuth2).
   GET  /admin/oauth/callback  -> Google OAuth2 callback.
   GET  /admin/logout          -> clears the session.
 
-Auth: Google "Sign in with Google" (Authorization Code flow), verified via
-Google's tokeninfo endpoint (no JWT library needed — Google validates the
-signature/audience/expiry server-side for us). Only ADMIN_ALLOWED_EMAIL may
-use the panel; the session is a signed cookie (HMAC-SHA256, stdlib only), so
-this stays dependency-free like the rest of the server.
+Auth: by default a simple username/password form (config.ADMIN_USERNAME /
+config.ADMIN_PASSWORD — change these via env vars before exposing this
+publicly). Optionally, ALSO set GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET to offer
+"Sign in with Google" as an extra option on the same login page (Authorization
+Code flow, verified via Google's tokeninfo endpoint — no JWT library needed).
+Either way the session is a signed cookie (HMAC-SHA256, stdlib only), so this
+stays dependency-free like the rest of the server.
 
-Setup (you must do this once, in your own Google Cloud project):
+Optional Google upgrade (not required — username/password works out of the
+box):
   1. console.cloud.google.com -> APIs & Services -> OAuth consent screen
      (External, testing is fine) -> add your email as a test user.
   2. Credentials -> Create Credentials -> OAuth client ID -> Web application.
      Authorized redirect URI: https://<your-host>/admin/oauth/callback
   3. Set env vars: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, ADMIN_ALLOWED_EMAIL
-     (your Google account email — only this account may sign in).
-Until these are set, /admin shows setup instructions instead of erroring.
+     (your Google account email — only this account may sign in that way).
 """
 import base64
 import hashlib
@@ -136,12 +140,16 @@ def _cookies(handler):
 
 
 def _current_email(handler):
+    """Return the signed-in identity (username or Google email), or None."""
     tok = _cookies(handler).get("admin_session")
     if not tok:
         return None
     payload = _verify(tok)
     if not payload:
         return None
+    if "user" in payload:
+        # Basic-auth session — password was already checked at login time.
+        return payload["user"]
     email = payload.get("email")
     if config.ADMIN_ALLOWED_EMAIL and email != config.ADMIN_ALLOWED_EMAIL:
         return None
@@ -175,18 +183,65 @@ def _redirect(handler, location, cookies=None):
     handler.end_headers()
 
 
-# --- OAuth: login / callback / logout ---------------------------------------
-def _configured():
+# --- Auth: username/password (default) + optional Google Sign-In ----------
+def _google_configured():
     return bool(config.GOOGLE_CLIENT_ID and config.GOOGLE_CLIENT_SECRET)
+
+
+def _login_form_html(error=None):
+    google_link = ('<p style="margin-top:1rem"><a href="/admin/login/google">'
+                  'Or sign in with Google</a></p>'
+                  if _google_configured() else "")
+    err = (f'<p class="err">{html.escape(error)}</p>' if error else "")
+    return _page_html(f"""
+<h2>Sign in</h2>
+{err}
+<form method="post" action="/admin/login" style="max-width:320px">
+  <p><label>Username<br>
+    <input type="text" name="username" autofocus required></label></p>
+  <p><label>Password<br>
+    <input type="password" name="password" required></label></p>
+  <button type="submit">Sign in</button>
+</form>
+{google_link}""", email=None)
+
+
+def _login(handler):
+    """GET /admin/login — the username/password form (default auth)."""
+    _send_html(handler, 200, _login_form_html())
+
+
+def _login_post(handler):
+    """POST /admin/login — check credentials, set the session cookie."""
+    length = int(handler.headers.get("Content-Length", 0) or 0)
+    raw = handler.rfile.read(length).decode() if length else ""
+    form = parse_qs(raw)
+    username = (form.get("username") or [""])[0]
+    password = (form.get("password") or [""])[0]
+    ok = (hmac.compare_digest(username, config.ADMIN_USERNAME)
+         and hmac.compare_digest(password, config.ADMIN_PASSWORD))
+    if not ok:
+        _send_html(handler, 401,
+                   _login_form_html(error="Incorrect username or password."))
+        return
+    token = _sign({"user": username, "exp": time.time() + _SESSION_TTL})
+    secure = "; Secure" if _origin(handler).startswith("https") else ""
+    handler.send_response(302)
+    handler.send_header("Location", "/admin")
+    handler.send_header(
+        "Set-Cookie",
+        f"admin_session={token}; Path=/; HttpOnly; Max-Age={_SESSION_TTL}; "
+        f"SameSite=Lax{secure}")
+    handler.end_headers()
 
 
 def _not_configured_html(origin=""):
     redirect_uri = f"{origin}/admin/oauth/callback" if origin \
         else "https://<your-host>/admin/oauth/callback"
     return _page_html(
-        "<h2>Admin UI setup required</h2>"
-        "<p>Google sign-in isn't configured yet. In your own Google Cloud "
-        "project:</p>"
+        "<h2>Google sign-in not configured</h2>"
+        "<p>This is optional — username/password login already works. To "
+        "also offer Google Sign-In, in your own Google Cloud project:</p>"
         "<ol>"
         "<li>APIs &amp; Services → OAuth consent screen → add your email as "
         "a test user.</li>"
@@ -196,11 +251,13 @@ def _not_configured_html(origin=""):
         "<li>Set env vars <code>GOOGLE_CLIENT_ID</code>, "
         "<code>GOOGLE_CLIENT_SECRET</code>, <code>ADMIN_ALLOWED_EMAIL</code> "
         "(your Google account) on the host, then restart.</li>"
-        "</ol>", email=None)
+        "</ol>"
+        '<p><a href="/admin/login">&larr; back to login</a></p>', email=None)
 
 
-def _login(handler):
-    if not _configured():
+def _login_google(handler):
+    """GET /admin/login/google — optional Google Sign-In redirect."""
+    if not _google_configured():
         _send_html(handler, 200, _not_configured_html(_origin(handler)))
         return
     state = secrets.token_urlsafe(24)
@@ -223,7 +280,7 @@ def _login(handler):
 
 
 def _oauth_callback(handler, query):
-    if not _configured():
+    if not _google_configured():
         _send_html(handler, 200, _not_configured_html(_origin(handler)))
         return
     code = (query.get("code") or [None])[0]
@@ -341,9 +398,6 @@ def _dashboard(handler):
     email = _current_email(handler)
     if not email:
         _redirect(handler, "/admin/login")
-        return
-    if not _configured():
-        _send_html(handler, 200, _not_configured_html(_origin(handler)))
         return
     products = _today_products()
     links = _load_json(_LINKS_PATH, {})
@@ -474,6 +528,10 @@ def handle(handler, method, path, query):
     """Handle one /admin* request. Returns True (always handles what it owns)."""
     if path == "/admin/login" and method == "GET":
         _login(handler)
+    elif path == "/admin/login" and method == "POST":
+        _login_post(handler)
+    elif path == "/admin/login/google" and method == "GET":
+        _login_google(handler)
     elif path == "/admin/oauth/callback" and method == "GET":
         _oauth_callback(handler, query)
     elif path == "/admin/logout" and method == "GET":
