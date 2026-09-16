@@ -144,6 +144,12 @@
       "kind": "cost",
       "amount": -0.0,
       "note": "cycle: viral-299-multi-styler-vs-dyson-airwrap-humidity-test"
+    },
+    {
+      "ts": "2026-09-16T04:17:11.193348+00:00",
+      "kind": "cost",
+      "amount": -0.0,
+      "note": "cycle: unplugged-oven-30-days-dual-basket-air-fryer-review"
     }
   ]
 }
