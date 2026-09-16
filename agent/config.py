@@ -130,3 +130,19 @@ REDDIT_USER_AGENT = os.environ.get(
     "REDDIT_USER_AGENT", "self-funding-agent/1.0 (by u/" +
     os.environ.get("REDDIT_USERNAME", "operator") + ")")
 
+# Instagram — the most in-demand channel: convert to a Business/Creator
+# account, link a Facebook Page, create a Meta Developer App, add the
+# Instagram Graph API product, add yourself as an Instagram Tester (accept
+# the invite in the Instagram app), then generate a long-lived access token
+# with instagram_basic + instagram_content_publish + pages_show_list +
+# pages_read_engagement. For single-account personal use like this, Meta's
+# public App Review is NOT required — only the tester-approved account can
+# be used, which is exactly what we want.
+INSTAGRAM_ACCESS_TOKEN = os.environ.get("INSTAGRAM_ACCESS_TOKEN", "")
+# Your Instagram Business Account ID (from the Graph API, not the @handle).
+INSTAGRAM_BUSINESS_ACCOUNT_ID = os.environ.get(
+    "INSTAGRAM_BUSINESS_ACCOUNT_ID", "")
+# Public base URL of THIS deployment (e.g. https://self-funding-agent.onrender.com)
+# — Instagram's API fetches media by URL rather than accepting file uploads,
+# so agent/server.py's /media/ route serves generated videos/images from here.
+MEDIA_BASE_URL = os.environ.get("MEDIA_BASE_URL", "")

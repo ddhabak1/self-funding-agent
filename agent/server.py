@@ -22,7 +22,7 @@ import threading
 import time
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, unquote
 
 from . import bus, config, ledger, optimize, reflect, selfheal
 
@@ -165,6 +165,32 @@ class _Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(data)
 
+    _MEDIA_TYPES = {".mp4": "video/mp4", ".jpg": "image/jpeg",
+                    ".jpeg": "image/jpeg", ".png": "image/png",
+                    ".txt": "text/plain; charset=utf-8"}
+
+    def _serve_media(self, path):
+        """Serve generated videos/images publicly (needed for platforms like
+        Instagram's Graph API, which fetch media by URL rather than upload).
+        Path-traversal safe: resolves and checks it's still under media/."""
+        rel = unquote(path[len("/media/"):])
+        media_root = (config.ROOT / "media").resolve()
+        target = (media_root / rel).resolve()
+        if media_root not in target.parents and target != media_root:
+            self._send(403, json.dumps({"error": "forbidden"}))
+            return
+        if not target.is_file():
+            self._send(404, json.dumps({"error": "not found"}))
+            return
+        ctype = self._MEDIA_TYPES.get(target.suffix.lower(),
+                                     "application/octet-stream")
+        data = target.read_bytes()
+        self.send_response(200)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+
     def log_message(self, *a):  # quiet default logging
         pass
 
@@ -174,6 +200,8 @@ class _Handler(BaseHTTPRequestHandler):
         if path.startswith("/admin"):
             from . import webui
             webui.handle(self, "GET", path, parse_qs(parsed.query))
+        elif path.startswith("/media/"):
+            self._serve_media(path)
         elif path in ("/health", "/healthz", "/livez", "/readyz"):
             report = _health()
             self._send(200 if report.get("healthy") else 503,

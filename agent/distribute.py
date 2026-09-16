@@ -5,20 +5,25 @@ funnel. This module turns every asset into platform-tailored share content and
 pushes it out across the public internet, three ways:
 
   1. Content packs — per-channel title/caption/hashtags/hook engineered for
-     click-through, funneling to the on-site landing page (compliant: no raw
-     affiliate links in social captions, FTC #ad disclosure included).
+     click-through, funneling to the asset's real destination (the operator's
+     affiliate link for video/image assets; compliant: no raw affiliate links
+     in social captions, FTC #ad disclosure included).
   2. Auto-post — fully autonomous publishing (no human per post) to channels
      with official, key-based APIs once the operator has created the real
-     account + credentials ONCE: Telegram bot, Discord webhook, X/Twitter API
-     v2 (OAuth 1.0a), Reddit API (OAuth2 script app), or a generic webhook
-     (Zapier/IFTTT/Make -> Instagram/YouTube/Facebook). No-ops safely without
-     credentials, so nothing breaks when tokens aren't set.
+     account + credentials ONCE: Instagram Graph API (video Reel or image
+     post — media served publicly via agent/server.py's /media/ route),
+     Telegram bot, Discord webhook, X/Twitter API v2 (OAuth 1.0a), Reddit API
+     (OAuth2 script app), or a generic webhook (Zapier/IFTTT/Make -> YouTube/
+     Facebook). No-ops safely without credentials, so nothing breaks when
+     tokens aren't set.
   3. Organic discovery — a real RSS feed + sitemap.xml + robots.txt on the
-     site so Google/Bing and feed readers surface the content for free, 24x7.
+     site so Google/Bing and feed readers surface the content for free, 24x7
+     (only meaningful while text posts exist; currently unused since the
+     pipeline moved to video/image-only — see agent/factory.py).
 
-Instagram/YouTube/Facebook need Meta/Google Business accounts + app review
-before their APIs allow posting, so those stay queued to state/distribution/
-for a human (or the generic webhook) to fan out until that's set up.
+YouTube/Facebook still need their own Business accounts + Meta/Google app
+setup before their native APIs allow posting, so those stay queued to
+state/distribution/ for a human (or the generic webhook) to fan out.
 """
 import base64
 import hashlib
@@ -99,6 +104,7 @@ def content_pack(brain, asset, product):
     yt_title = (title if len(title) <= 90 else title[:87] + "...")
     pack = {
         "slug": slug, "product": prod, "landing_url": url,
+        "media": {"video": asset.get("video"), "image": asset.get("image")},
         "channels": {
             "youtube_shorts": {
                 "title": yt_title,
@@ -227,11 +233,76 @@ def _post_reddit(title, body_text):
         return json.loads(r.read().decode())
 
 
+def _ig_call(path, method="GET", **params):
+    """Instagram Graph API request (stdlib only)."""
+    params = dict(params)
+    params["access_token"] = config.INSTAGRAM_ACCESS_TOKEN
+    url = f"https://graph.facebook.com/v19.0/{path}"
+    if method == "GET":
+        req = urllib.request.Request(url + "?" + urlencode(params))
+    else:
+        req = urllib.request.Request(url, data=urlencode(params).encode(),
+                                     method="POST")
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return json.loads(r.read().decode())
+
+
+def _post_instagram(pack):
+    """Publish a Reel (video) or feed image via the official Content
+    Publishing API. Media must be at a public URL — served by this app's own
+    /media/ route (agent/server.py), not uploaded as a file, per Instagram's
+    API design. Requires the operator's own tester-approved Business account
+    (see config.py for the one-time setup)."""
+    ig_id = config.INSTAGRAM_BUSINESS_ACCOUNT_ID
+    base = config.MEDIA_BASE_URL.rstrip("/")
+    media = pack.get("media", {})
+    caption = pack["channels"]["instagram_reels"]["caption"]
+
+    if media.get("video"):
+        media_url = f"{base}/{media['video']}"
+        cont = _ig_call(f"{ig_id}/media", method="POST", media_type="REELS",
+                        video_url=media_url, caption=caption)
+        creation_id = cont["id"]
+        # Reels are processed asynchronously — poll briefly before publishing.
+        for _ in range(30):
+            status = _ig_call(creation_id, fields="status_code")
+            code = status.get("status_code")
+            if code == "FINISHED":
+                break
+            if code == "ERROR":
+                raise RuntimeError(f"Instagram processing failed: {status}")
+            time.sleep(10)
+        else:
+            raise RuntimeError("Instagram video still processing after 5 min")
+    elif media.get("image"):
+        media_url = f"{base}/{media['image']}"
+        cont = _ig_call(f"{ig_id}/media", method="POST",
+                        image_url=media_url, caption=caption)
+        creation_id = cont["id"]
+    else:
+        return None  # nothing to post
+
+    return _ig_call(f"{ig_id}/media_publish", method="POST",
+                    creation_id=creation_id)
+
+
 def auto_post(pack):
     """Publish to public channels that expose FREE APIs when a token is set."""
     posted = []
     text = pack["channels"]["telegram"]["text"]
     url = pack["landing_url"]
+
+    # Instagram — official Graph API (video Reel or image post).
+    if (config.INSTAGRAM_ACCESS_TOKEN and config.INSTAGRAM_BUSINESS_ACCOUNT_ID
+            and config.MEDIA_BASE_URL
+            and (pack.get("media", {}).get("video")
+                or pack.get("media", {}).get("image"))):
+        try:
+            _post_instagram(pack)
+            posted.append("instagram_reels")
+        except Exception as e:
+            bus.post(NAME, "post_failed",
+                     {"channel": "instagram_reels", "err": str(e)[:150]})
 
     # Telegram public channel — free Bot API, genuinely public sharing.
     tok = os.environ.get("TELEGRAM_BOT_TOKEN")
