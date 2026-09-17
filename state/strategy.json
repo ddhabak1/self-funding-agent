@@ -1,8 +1,8 @@
 {
   "styles": {
     "shock_stat": {
-      "count": 30,
-      "reward": 53.40000000000001
+      "count": 66,
+      "reward": 118.48
     },
     "mistake_warning": {
       "count": 0,
@@ -21,12 +21,12 @@
       "reward": 0.0
     },
     "question_hook": {
-      "count": 9,
-      "reward": 15.66
+      "count": 12,
+      "reward": 20.879999999999995
     },
     "secret_reveal": {
-      "count": 58,
-      "reward": 102.47999999999998
+      "count": 88,
+      "reward": 154.85999999999999
     },
     "price_shock": {
       "count": 0,
@@ -35,22 +35,34 @@
   },
   "categories": {
     "beauty": {
-      "count": 58,
-      "reward": 107.04
+      "count": 85,
+      "reward": 156.71999999999997
     },
     "grooming": {
-      "count": 16,
-      "reward": 27.83999999999999
+      "count": 25,
+      "reward": 43.5
     },
     "kitchen": {
-      "count": 16,
-      "reward": 25.6
+      "count": 28,
+      "reward": 44.56000000000002
     },
     "decor": {
-      "count": 7,
-      "reward": 11.06
+      "count": 13,
+      "reward": 20.54
+    },
+    "men's grooming": {
+      "count": 9,
+      "reward": 17.82
+    },
+    "kitchen & cookware": {
+      "count": 4,
+      "reward": 7.28
+    },
+    "smart home accessories": {
+      "count": 2,
+      "reward": 3.8000000000000003
     }
   },
-  "updated": "2026-09-13T21:17:04.746405+00:00",
-  "generation": 9
+  "updated": "2026-09-17T22:38:15.580323+00:00",
+  "generation": 12
 }

@@ -196,5 +196,83 @@
     "video": null,
     "created": "2026-09-13T21:17:04.265120+00:00",
     "logged": "2026-09-13T21:17:04.735817+00:00"
+  },
+  {
+    "id": "eeb44d9c6a5d",
+    "product": "Philips BT3221/15 Cordless Beard Trimmer",
+    "category": "men's grooming",
+    "style": "shock_stat",
+    "opportunity": 90.0,
+    "video": null,
+    "image": "media/philips-bt322115-cordless-beard-trimmer-shock_stat/thumbnail.jpg",
+    "buy_url": "https://www.amazon.in/s?k=Philips+BT3221+15+beard+trimmer+men&tag=dipankarsstor-21",
+    "manual_link": false,
+    "created": "2026-09-17T22:17:45.046313+00:00",
+    "logged": "2026-09-17T22:19:01.485041+00:00"
+  },
+  {
+    "id": "a8ec23a2b231",
+    "product": "Beardo Godfather Beard Oil for Men",
+    "category": "men's grooming",
+    "style": "shock_stat",
+    "opportunity": 81.0,
+    "video": null,
+    "image": "media/beardo-godfather-beard-oil-for-men-shock_stat/thumbnail.jpg",
+    "buy_url": "https://www.amazon.in/s?k=Beardo+Godfather+beard+oil+30ml&tag=dipankarsstor-21",
+    "manual_link": false,
+    "created": "2026-09-17T22:21:33.013919+00:00",
+    "logged": "2026-09-17T22:21:48.992355+00:00"
+  },
+  {
+    "id": "e29305891430",
+    "product": "UrbanGabru Hair Removal Cream Spray for Men",
+    "category": "men's grooming",
+    "style": "shock_stat",
+    "opportunity": 81.0,
+    "video": null,
+    "image": "media/urbangabru-hair-removal-cream-spray-for-men-shock_stat/thumbnail.jpg",
+    "buy_url": "https://www.amazon.in/s?k=UrbanGabru+hair+removal+spray+for+men&tag=dipankarsstor-21",
+    "manual_link": false,
+    "created": "2026-09-17T22:24:20.410569+00:00",
+    "logged": "2026-09-17T22:25:36.553288+00:00"
+  },
+  {
+    "id": "2e7d73b30c12",
+    "product": "Pigeon by Stovekraft Handy & Compact Vegetable Chopper (3 Blades)",
+    "category": "kitchen & cookware",
+    "style": "shock_stat",
+    "opportunity": 80.0,
+    "video": null,
+    "image": "media/pigeon-by-stovekraft-handy-compact-vegetable-chopper-3-blade/thumbnail.jpg",
+    "buy_url": "https://www.amazon.in/s?k=pigeon+handy+vegetable+chopper+3+blades+amazon+india&tag=dipankarsstor-21",
+    "manual_link": false,
+    "created": "2026-09-17T22:28:08.092145+00:00",
+    "logged": "2026-09-17T22:29:24.395225+00:00"
+  },
+  {
+    "id": "7218d864fa08",
+    "product": "TP-Link Tapo C200 1080p Full HD Pan/Tilt Smart Wi-Fi Security Camera",
+    "category": "smart home accessories",
+    "style": "shock_stat",
+    "opportunity": 80.0,
+    "video": null,
+    "image": "media/tplink-tapo-c200-1080p-full-hd-pantilt-smart-wifi-security-c/thumbnail.jpg",
+    "buy_url": "https://www.amazon.in/s?k=tp-link+tapo+c200+smart+camera&tag=dipankarsstor-21",
+    "manual_link": false,
+    "created": "2026-09-17T22:31:55.652381+00:00",
+    "logged": "2026-09-17T22:33:11.706780+00:00"
+  },
+  {
+    "id": "dc42dc2a15f0",
+    "product": "Prestige Iris 750 Watt Mixer Grinder with 4 Jars",
+    "category": "kitchen & cookware",
+    "style": "shock_stat",
+    "opportunity": 72.0,
+    "video": null,
+    "image": "media/prestige-iris-750-watt-mixer-grinder-with-4-jars-shock_stat/thumbnail.jpg",
+    "buy_url": "https://www.amazon.in/s?k=prestige+iris+750w+mixer+grinder+amazon+india&tag=dipankarsstor-21",
+    "manual_link": false,
+    "created": "2026-09-17T22:35:43.035634+00:00",
+    "logged": "2026-09-17T22:36:59.614195+00:00"
   }
 ]

@@ -1,6 +1,87 @@
 {
   "source": "swarm",
   "workers": 100,
-  "candidates": 0,
-  "products": []
+  "candidates": 16,
+  "products": [
+    {
+      "product": "Philips BT3221/15 Cordless Beard Trimmer",
+      "search_query": "Philips BT3221 15 beard trimmer men",
+      "category": "men's grooming",
+      "heat": 10,
+      "commission": 0.09,
+      "opportunity": 90.0
+    },
+    {
+      "product": "Beardo Godfather Beard Oil for Men",
+      "search_query": "Beardo Godfather beard oil 30ml",
+      "category": "men's grooming",
+      "heat": 9,
+      "commission": 0.09,
+      "opportunity": 81.0
+    },
+    {
+      "product": "UrbanGabru Hair Removal Cream Spray for Men",
+      "search_query": "UrbanGabru hair removal spray for men",
+      "category": "men's grooming",
+      "heat": 9,
+      "commission": 0.09,
+      "opportunity": 81.0
+    },
+    {
+      "product": "Pigeon by Stovekraft Handy & Compact Vegetable Chopper (3 Blades)",
+      "search_query": "pigeon handy vegetable chopper 3 blades amazon india",
+      "category": "kitchen & cookware",
+      "heat": 10,
+      "commission": 0.08,
+      "opportunity": 80.0
+    },
+    {
+      "product": "TP-Link Tapo C200 1080p Full HD Pan/Tilt Smart Wi-Fi Security Camera",
+      "search_query": "tp-link tapo c200 smart camera",
+      "category": "smart home accessories",
+      "heat": 10,
+      "commission": 0.08,
+      "opportunity": 80.0
+    },
+    {
+      "product": "Prestige Iris 750 Watt Mixer Grinder with 4 Jars",
+      "search_query": "prestige iris 750w mixer grinder amazon india",
+      "category": "kitchen & cookware",
+      "heat": 9,
+      "commission": 0.08,
+      "opportunity": 72.0
+    },
+    {
+      "product": "Hawkins Contura Hard Anodised Pressure Cooker 3 Litre",
+      "search_query": "hawkins contura hard anodised pressure cooker 3l amazon india",
+      "category": "kitchen & cookware",
+      "heat": 9,
+      "commission": 0.08,
+      "opportunity": 72.0
+    },
+    {
+      "product": "Foldable Fabric Saree and Clothes Storage Bag Set",
+      "search_query": "foldable fabric storage bag for clothes saree organiser",
+      "category": "home organisation",
+      "heat": 9,
+      "commission": 0.08,
+      "opportunity": 72.0
+    },
+    {
+      "product": "Modular Plastic Drawer Storage Tower for Wardrobe and Kitchen",
+      "search_query": "modular plastic drawer storage organiser for home",
+      "category": "home organisation",
+      "heat": 9,
+      "commission": 0.08,
+      "opportunity": 72.0
+    },
+    {
+      "product": "Wipro 16A Wi-Fi Smart Plug with Energy Monitoring",
+      "search_query": "wipro 16a smart plug with energy monitoring",
+      "category": "smart home accessories",
+      "heat": 9,
+      "commission": 0.08,
+      "opportunity": 72.0
+    }
+  ]
 }
