@@ -186,6 +186,12 @@
       "kind": "cost",
       "amount": -0.0,
       "note": "cycle: ergonomic-office-chair-pressure-map-lumbar-test"
+    },
+    {
+      "ts": "2026-09-17T21:17:28.721944+00:00",
+      "kind": "cost",
+      "amount": -0.0,
+      "note": "cycle: bestair-fryers-smart-kitchen-appliances2026"
     }
   ]
 }
