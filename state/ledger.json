@@ -180,6 +180,12 @@
       "kind": "cost",
       "amount": -0.0,
       "note": "cycle: dropped-polycarbonate-carry-on-luggage-durability-test"
+    },
+    {
+      "ts": "2026-09-17T16:46:54.664213+00:00",
+      "kind": "cost",
+      "amount": -0.0,
+      "note": "cycle: ergonomic-office-chair-pressure-map-lumbar-test"
     }
   ]
 }
