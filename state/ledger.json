@@ -234,6 +234,12 @@
       "kind": "cost",
       "amount": -0.0,
       "note": "cycle: green-laser-microplastic-test-reverse-osmosis-water-purifier"
+    },
+    {
+      "ts": "2026-09-19T10:42:57.723148+00:00",
+      "kind": "cost",
+      "amount": -0.0,
+      "note": "cycle: thermal-camera-test-multi-styler-vs-curling-iron"
     }
   ]
 }
