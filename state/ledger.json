@@ -240,6 +240,12 @@
       "kind": "cost",
       "amount": -0.0,
       "note": "cycle: thermal-camera-test-multi-styler-vs-curling-iron"
+    },
+    {
+      "ts": "2026-09-19T15:50:10.261840+00:00",
+      "kind": "cost",
+      "amount": -0.0,
+      "note": "cycle: uv-blacklight-robot-vacuum-micro-dust-test"
     }
   ]
 }
