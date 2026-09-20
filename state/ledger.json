@@ -258,6 +258,12 @@
       "kind": "cost",
       "amount": -0.0,
       "note": "cycle: industrial-wattmeter-inverter-ac-heatwave-cost-test"
+    },
+    {
+      "ts": "2026-09-20T04:25:57.714910+00:00",
+      "kind": "cost",
+      "amount": -0.0,
+      "note": "cycle: ergonomic-chair-vs-gaming-chair-pressure-map-test"
     }
   ]
 }
