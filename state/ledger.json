@@ -264,6 +264,12 @@
       "kind": "cost",
       "amount": -0.0,
       "note": "cycle: ergonomic-chair-vs-gaming-chair-pressure-map-test"
+    },
+    {
+      "ts": "2026-09-20T11:06:15.953565+00:00",
+      "kind": "cost",
+      "amount": -0.0,
+      "note": "cycle: extracted-rendered-fat-smart-air-fryer-calorie-experiment"
     }
   ]
 }
