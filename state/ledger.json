@@ -300,6 +300,12 @@
       "kind": "cost",
       "amount": -0.0,
       "note": "cycle: security-camera-infrared-scope-night-vision-test"
+    },
+    {
+      "ts": "2026-09-21T19:59:02.383303+00:00",
+      "kind": "cost",
+      "amount": -0.0,
+      "note": "cycle: bestsmartwatches2026"
     }
   ]
 }
