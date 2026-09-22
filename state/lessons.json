@@ -1,57 +1,73 @@
 {
-  "ts": "2026-09-21T22:27:24.881537+00:00",
-  "generation": 15,
-  "assets_seen": 30,
+  "ts": "2026-09-22T21:48:25.505598+00:00",
+  "generation": 18,
+  "assets_seen": 36,
   "best_styles": [
     [
       "shock_stat",
-      1.79,
-      120
+      1.781,
+      190
     ],
     [
       "secret_reveal",
-      1.756,
-      118
+      1.754,
+      148
     ],
     [
       "question_hook",
       1.74,
-      15
+      18
     ]
   ],
-  "weak_styles": [],
+  "weak_styles": [
+    [
+      "secret_reveal",
+      1.754,
+      148
+    ],
+    [
+      "question_hook",
+      1.74,
+      18
+    ],
+    [
+      "mistake_warning",
+      1.58,
+      2
+    ]
+  ],
   "best_categories": [
     [
       "men's grooming",
       1.98,
-      18
+      27
     ],
     [
       "smart home accessories",
       1.9,
-      5
+      8
     ],
     [
       "beauty",
-      1.843,
-      117
+      1.842,
+      155
     ]
   ],
   "weak_categories": [
     [
       "grooming",
       1.74,
-      37
+      52
     ],
     [
       "kitchen",
-      1.591,
-      45
+      1.589,
+      68
     ],
     [
       "decor",
       1.58,
-      21
+      32
     ]
   ],
   "video": {
@@ -59,8 +75,8 @@
     "avg_opportunity": 76.5
   },
   "post_only": {
-    "count": 28,
-    "avg_opportunity": 72.893
+    "count": 34,
+    "avg_opportunity": 72.294
   },
-  "guidance": "lean into men's grooming, smart home accessories, beauty; favor hooks that Open with a surprising number or statistic."
+  "guidance": "lean into men's grooming, smart home accessories, beauty; favor hooks that Open with a surprising number or statistic; avoid over-using the secret reveal angle."
 }
