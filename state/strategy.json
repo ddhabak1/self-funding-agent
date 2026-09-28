@@ -1,12 +1,12 @@
 {
   "styles": {
     "shock_stat": {
-      "count": 760,
-      "reward": 1332.9600000000034
+      "count": 918,
+      "reward": 1606.480000000007
     },
     "mistake_warning": {
-      "count": 36,
-      "reward": 57.67999999999998
+      "count": 45,
+      "reward": 72.37999999999997
     },
     "before_after": {
       "count": 0,
@@ -17,52 +17,52 @@
       "reward": 0.0
     },
     "countdown": {
-      "count": 3,
-      "reward": 5.22
+      "count": 6,
+      "reward": 10.44
     },
     "question_hook": {
-      "count": 33,
-      "reward": 57.420000000000016
+      "count": 36,
+      "reward": 62.64000000000002
     },
     "secret_reveal": {
-      "count": 312,
-      "reward": 541.4000000000013
+      "count": 347,
+      "reward": 600.8800000000009
     },
     "price_shock": {
-      "count": 9,
-      "reward": 15.66
+      "count": 14,
+      "reward": 24.359999999999992
     }
   },
   "categories": {
     "beauty": {
-      "count": 435,
-      "reward": 799.7399999999989
+      "count": 509,
+      "reward": 935.5199999999976
     },
     "grooming": {
-      "count": 172,
-      "reward": 299.2800000000007
+      "count": 205,
+      "reward": 356.700000000001
     },
     "kitchen": {
-      "count": 273,
-      "reward": 432.7800000000012
+      "count": 332,
+      "reward": 526.1600000000017
     },
     "decor": {
-      "count": 132,
-      "reward": 208.5600000000005
+      "count": 161,
+      "reward": 254.38000000000088
     },
     "men's grooming": {
-      "count": 72,
-      "reward": 142.55999999999992
+      "count": 81,
+      "reward": 160.37999999999982
     },
     "kitchen & cookware": {
-      "count": 46,
-      "reward": 83.72
+      "count": 52,
+      "reward": 94.64
     },
     "smart home accessories": {
-      "count": 23,
-      "reward": 43.69999999999998
+      "count": 26,
+      "reward": 49.39999999999998
     }
   },
-  "updated": "2026-09-27T21:49:32.555831+00:00",
-  "generation": 33
+  "updated": "2026-09-28T23:40:42.802440+00:00",
+  "generation": 36
 }
