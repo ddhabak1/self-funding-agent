@@ -1,12 +1,12 @@
 {
   "styles": {
     "shock_stat": {
-      "count": 918,
-      "reward": 1606.480000000007
+      "count": 1092,
+      "reward": 1907.260000000011
     },
     "mistake_warning": {
-      "count": 45,
-      "reward": 72.37999999999997
+      "count": 54,
+      "reward": 87.07999999999994
     },
     "before_after": {
       "count": 0,
@@ -17,52 +17,52 @@
       "reward": 0.0
     },
     "countdown": {
-      "count": 6,
-      "reward": 10.44
+      "count": 9,
+      "reward": 15.66
     },
     "question_hook": {
-      "count": 36,
-      "reward": 62.64000000000002
+      "count": 39,
+      "reward": 67.86000000000001
     },
     "secret_reveal": {
-      "count": 347,
-      "reward": 600.8800000000009
+      "count": 383,
+      "reward": 661.7800000000004
     },
     "price_shock": {
-      "count": 14,
-      "reward": 24.359999999999992
+      "count": 20,
+      "reward": 34.79999999999999
     }
   },
   "categories": {
     "beauty": {
-      "count": 509,
-      "reward": 935.5199999999976
+      "count": 589,
+      "reward": 1082.279999999998
     },
     "grooming": {
-      "count": 205,
-      "reward": 356.700000000001
+      "count": 241,
+      "reward": 419.34000000000134
     },
     "kitchen": {
-      "count": 332,
-      "reward": 526.1600000000017
+      "count": 397,
+      "reward": 629.0200000000007
     },
     "decor": {
-      "count": 161,
-      "reward": 254.38000000000088
+      "count": 193,
+      "reward": 304.9400000000004
     },
     "men's grooming": {
-      "count": 81,
-      "reward": 160.37999999999982
+      "count": 90,
+      "reward": 178.19999999999973
     },
     "kitchen & cookware": {
-      "count": 52,
-      "reward": 94.64
+      "count": 58,
+      "reward": 105.56
     },
     "smart home accessories": {
-      "count": 26,
-      "reward": 49.39999999999998
+      "count": 29,
+      "reward": 55.09999999999997
     }
   },
-  "updated": "2026-09-28T23:40:42.802440+00:00",
-  "generation": 36
+  "updated": "2026-09-29T22:51:11.186657+00:00",
+  "generation": 39
 }

@@ -546,6 +546,12 @@
       "kind": "cost",
       "amount": -0.0,
       "note": "cycle: bestsmartwatches2026"
+    },
+    {
+      "ts": "2026-09-29T22:51:11.192116+00:00",
+      "kind": "cost",
+      "amount": -0.0,
+      "note": "night: 6 assets"
     }
   ]
 }
