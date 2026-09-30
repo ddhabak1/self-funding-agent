@@ -1,68 +1,68 @@
 {
   "styles": {
     "shock_stat": {
-      "count": 1092,
-      "reward": 1907.260000000011
+      "count": 1272,
+      "reward": 2218.0000000000036
     },
     "mistake_warning": {
-      "count": 54,
-      "reward": 87.07999999999994
+      "count": 63,
+      "reward": 101.77999999999992
     },
     "before_after": {
-      "count": 0,
-      "reward": 0.0
+      "count": 9,
+      "reward": 15.24
     },
     "myth_bust": {
       "count": 0,
       "reward": 0.0
     },
     "countdown": {
-      "count": 9,
-      "reward": 15.66
+      "count": 12,
+      "reward": 20.879999999999995
     },
     "question_hook": {
-      "count": 39,
-      "reward": 67.86000000000001
+      "count": 45,
+      "reward": 78.29999999999998
     },
     "secret_reveal": {
-      "count": 383,
-      "reward": 661.7800000000004
+      "count": 419,
+      "reward": 722.68
     },
     "price_shock": {
-      "count": 20,
-      "reward": 34.79999999999999
+      "count": 26,
+      "reward": 45.24
     }
   },
   "categories": {
     "beauty": {
-      "count": 589,
-      "reward": 1082.279999999998
+      "count": 675,
+      "reward": 1240.0200000000016
     },
     "grooming": {
-      "count": 241,
-      "reward": 419.34000000000134
+      "count": 280,
+      "reward": 487.2000000000017
     },
     "kitchen": {
-      "count": 397,
-      "reward": 629.0200000000007
+      "count": 468,
+      "reward": 741.3599999999996
     },
     "decor": {
-      "count": 193,
-      "reward": 304.9400000000004
+      "count": 228,
+      "reward": 360.23999999999984
     },
     "men's grooming": {
-      "count": 90,
-      "reward": 178.19999999999973
+      "count": 99,
+      "reward": 196.01999999999964
     },
     "kitchen & cookware": {
-      "count": 58,
-      "reward": 105.56
+      "count": 64,
+      "reward": 116.48
     },
     "smart home accessories": {
-      "count": 29,
-      "reward": 55.09999999999997
+      "count": 32,
+      "reward": 60.79999999999997
     }
   },
-  "updated": "2026-09-29T22:51:11.186657+00:00",
-  "generation": 39
+  "updated": "2026-09-30T22:49:11.554543+00:00",
+  "generation": 42
 }
