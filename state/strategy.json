@@ -1,68 +1,68 @@
 {
   "styles": {
     "shock_stat": {
-      "count": 1272,
-      "reward": 2218.0000000000036
+      "count": 1458,
+      "reward": 2539.179999999987
     },
     "mistake_warning": {
-      "count": 63,
-      "reward": 101.77999999999992
+      "count": 72,
+      "reward": 116.47999999999989
     },
     "before_after": {
-      "count": 9,
-      "reward": 15.24
+      "count": 21,
+      "reward": 35.220000000000006
     },
     "myth_bust": {
       "count": 0,
       "reward": 0.0
     },
     "countdown": {
-      "count": 12,
-      "reward": 20.879999999999995
+      "count": 15,
+      "reward": 26.09999999999999
     },
     "question_hook": {
-      "count": 45,
-      "reward": 78.29999999999998
+      "count": 60,
+      "reward": 103.97999999999995
     },
     "secret_reveal": {
-      "count": 419,
-      "reward": 722.68
+      "count": 455,
+      "reward": 783.5799999999995
     },
     "price_shock": {
-      "count": 26,
-      "reward": 45.24
+      "count": 32,
+      "reward": 55.680000000000014
     }
   },
   "categories": {
     "beauty": {
-      "count": 675,
-      "reward": 1240.0200000000016
+      "count": 767,
+      "reward": 1408.7400000000055
     },
     "grooming": {
-      "count": 280,
-      "reward": 487.2000000000017
+      "count": 322,
+      "reward": 560.280000000002
     },
     "kitchen": {
-      "count": 468,
-      "reward": 741.3599999999996
+      "count": 545,
+      "reward": 863.1799999999984
     },
     "decor": {
-      "count": 228,
-      "reward": 360.23999999999984
+      "count": 266,
+      "reward": 420.27999999999923
     },
     "men's grooming": {
-      "count": 99,
-      "reward": 196.01999999999964
+      "count": 108,
+      "reward": 213.83999999999955
     },
     "kitchen & cookware": {
-      "count": 64,
-      "reward": 116.48
+      "count": 70,
+      "reward": 127.4
     },
     "smart home accessories": {
-      "count": 32,
-      "reward": 60.79999999999997
+      "count": 35,
+      "reward": 66.49999999999997
     }
   },
-  "updated": "2026-09-30T22:49:11.554543+00:00",
-  "generation": 42
+  "updated": "2026-10-01T23:01:33.251321+00:00",
+  "generation": 45
 }
