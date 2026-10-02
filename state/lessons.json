@@ -1,73 +1,73 @@
 {
-  "ts": "2026-10-01T23:01:33.253901+00:00",
-  "generation": 45,
-  "assets_seen": 90,
+  "ts": "2026-10-02T22:47:15.077220+00:00",
+  "generation": 48,
+  "assets_seen": 96,
   "best_styles": [
-    [
-      "shock_stat",
-      1.742,
-      1458
-    ],
     [
       "price_shock",
       1.74,
-      32
+      38
     ],
     [
       "countdown",
       1.74,
-      15
+      18
+    ],
+    [
+      "shock_stat",
+      1.74,
+      1657
     ]
   ],
   "weak_styles": [
     [
       "secret_reveal",
-      1.722,
-      455
+      1.72,
+      491
     ],
     [
       "before_after",
-      1.677,
-      21
+      1.673,
+      33
     ],
     [
       "mistake_warning",
-      1.618,
-      72
+      1.619,
+      83
     ]
   ],
   "best_categories": [
     [
       "men's grooming",
       1.98,
-      108
+      117
     ],
     [
       "smart home accessories",
       1.9,
-      35
+      38
     ],
     [
       "beauty",
-      1.837,
-      767
+      1.836,
+      865
     ]
   ],
   "weak_categories": [
     [
       "grooming",
       1.74,
-      322
+      367
     ],
     [
       "kitchen",
       1.584,
-      545
+      628
     ],
     [
       "decor",
       1.58,
-      266
+      307
     ]
   ],
   "video": {
@@ -75,8 +75,8 @@
     "avg_opportunity": 76.5
   },
   "post_only": {
-    "count": 88,
-    "avg_opportunity": 70.58
+    "count": 94,
+    "avg_opportunity": 70.511
   },
-  "guidance": "lean into men's grooming, smart home accessories, beauty; favor hooks that Open with a surprising number or statistic; avoid over-using the secret reveal angle."
+  "guidance": "lean into men's grooming, smart home accessories, beauty; favor hooks that Lead with a 'you won't believe the price' angle; avoid over-using the secret reveal angle."
 }
