@@ -1,73 +1,73 @@
 {
-  "ts": "2026-10-02T22:47:15.077220+00:00",
-  "generation": 48,
-  "assets_seen": 96,
+  "ts": "2026-10-03T21:59:46.545294+00:00",
+  "generation": 51,
+  "assets_seen": 102,
   "best_styles": [
-    [
-      "price_shock",
-      1.74,
-      38
-    ],
     [
       "countdown",
       1.74,
-      18
+      21
     ],
     [
       "shock_stat",
-      1.74,
-      1657
+      1.738,
+      1858
+    ],
+    [
+      "price_shock",
+      1.738,
+      57
     ]
   ],
   "weak_styles": [
     [
-      "secret_reveal",
-      1.72,
-      491
-    ],
-    [
       "before_after",
-      1.673,
-      33
+      1.671,
+      45
     ],
     [
       "mistake_warning",
       1.619,
-      83
+      95
+    ],
+    [
+      "myth_bust",
+      1.58,
+      2
     ]
   ],
   "best_categories": [
     [
       "men's grooming",
       1.98,
-      117
+      126
     ],
     [
       "smart home accessories",
       1.9,
-      38
+      41
     ],
     [
       "beauty",
       1.836,
-      865
+      969
     ]
   ],
   "weak_categories": [
     [
       "grooming",
       1.74,
-      367
+      415
     ],
     [
       "kitchen",
-      1.584,
-      628
+      1.583,
+      717
     ],
     [
       "decor",
       1.58,
-      307
+      351
     ]
   ],
   "video": {
@@ -75,8 +75,8 @@
     "avg_opportunity": 76.5
   },
   "post_only": {
-    "count": 94,
-    "avg_opportunity": 70.511
+    "count": 100,
+    "avg_opportunity": 70.45
   },
-  "guidance": "lean into men's grooming, smart home accessories, beauty; favor hooks that Lead with a 'you won't believe the price' angle; avoid over-using the secret reveal angle."
+  "guidance": "lean into men's grooming, smart home accessories, beauty; favor hooks that Frame it as a fast top-3 countdown of picks; avoid over-using the before after angle."
 }
