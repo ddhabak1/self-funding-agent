@@ -1,68 +1,68 @@
 {
   "styles": {
     "shock_stat": {
-      "count": 1858,
-      "reward": 3229.739999999951
+      "count": 2059,
+      "reward": 3576.599999999933
     },
     "mistake_warning": {
-      "count": 95,
-      "reward": 153.78000000000006
+      "count": 107,
+      "reward": 173.2200000000002
     },
     "before_after": {
-      "count": 45,
-      "reward": 75.18000000000002
+      "count": 57,
+      "reward": 95.16000000000001
     },
     "myth_bust": {
-      "count": 2,
-      "reward": 3.16
+      "count": 5,
+      "reward": 7.9
     },
     "countdown": {
-      "count": 21,
-      "reward": 36.53999999999999
+      "count": 37,
+      "reward": 64.60000000000002
     },
     "question_hook": {
-      "count": 96,
-      "reward": 164.81999999999996
+      "count": 116,
+      "reward": 198.07999999999998
     },
     "secret_reveal": {
-      "count": 527,
-      "reward": 905.3799999999985
+      "count": 563,
+      "reward": 966.279999999998
     },
     "price_shock": {
-      "count": 57,
-      "reward": 99.07999999999996
+      "count": 78,
+      "reward": 135.1999999999999
     }
   },
   "categories": {
     "beauty": {
-      "count": 969,
-      "reward": 1779.120000000014
+      "count": 1079,
+      "reward": 1980.7800000000186
     },
     "grooming": {
-      "count": 415,
-      "reward": 722.1000000000029
+      "count": 466,
+      "reward": 810.8400000000033
     },
     "kitchen": {
-      "count": 717,
-      "reward": 1135.2599999999995
+      "count": 812,
+      "reward": 1285.5200000000034
     },
     "decor": {
-      "count": 351,
-      "reward": 554.5799999999994
+      "count": 398,
+      "reward": 628.8400000000013
     },
     "men's grooming": {
-      "count": 126,
-      "reward": 249.47999999999936
+      "count": 135,
+      "reward": 267.29999999999944
     },
     "kitchen & cookware": {
-      "count": 82,
-      "reward": 149.2400000000001
+      "count": 88,
+      "reward": 160.16000000000014
     },
     "smart home accessories": {
-      "count": 41,
-      "reward": 77.9
+      "count": 44,
+      "reward": 83.60000000000002
     }
   },
-  "updated": "2026-10-03T21:59:46.542732+00:00",
-  "generation": 51
+  "updated": "2026-10-04T22:11:15.520602+00:00",
+  "generation": 54
 }
