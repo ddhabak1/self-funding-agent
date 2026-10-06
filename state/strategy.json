@@ -1,68 +1,68 @@
 {
   "styles": {
     "shock_stat": {
-      "count": 2263,
-      "reward": 3928.6799999999143
+      "count": 2469,
+      "reward": 4283.919999999895
     },
     "mistake_warning": {
-      "count": 119,
-      "reward": 192.66000000000034
+      "count": 131,
+      "reward": 212.10000000000048
     },
     "before_after": {
-      "count": 69,
-      "reward": 115.14
+      "count": 81,
+      "reward": 135.11999999999998
     },
     "myth_bust": {
-      "count": 8,
-      "reward": 12.64
+      "count": 11,
+      "reward": 17.380000000000003
     },
     "countdown": {
-      "count": 65,
-      "reward": 113.59999999999994
+      "count": 106,
+      "reward": 184.96000000000004
     },
     "question_hook": {
-      "count": 137,
-      "reward": 232.76
+      "count": 160,
+      "reward": 270.9200000000001
     },
     "secret_reveal": {
-      "count": 599,
-      "reward": 1027.1799999999978
+      "count": 635,
+      "reward": 1088.079999999999
     },
     "price_shock": {
-      "count": 101,
-      "reward": 174.15999999999994
+      "count": 125,
+      "reward": 214.53999999999996
     }
   },
   "categories": {
     "beauty": {
-      "count": 1195,
-      "reward": 2193.4200000000146
+      "count": 1317,
+      "reward": 2417.0400000000063
     },
     "grooming": {
-      "count": 520,
-      "reward": 904.8000000000038
+      "count": 577,
+      "reward": 1003.9800000000043
     },
     "kitchen": {
-      "count": 913,
-      "reward": 1445.2600000000075
+      "count": 1020,
+      "reward": 1614.4800000000118
     },
     "decor": {
-      "count": 448,
-      "reward": 707.8400000000033
+      "count": 501,
+      "reward": 791.5800000000055
     },
     "men's grooming": {
-      "count": 144,
-      "reward": 285.1199999999996
+      "count": 153,
+      "reward": 302.93999999999977
     },
     "kitchen & cookware": {
-      "count": 94,
-      "reward": 171.08000000000018
+      "count": 100,
+      "reward": 182.00000000000023
     },
     "smart home accessories": {
-      "count": 47,
-      "reward": 89.30000000000004
+      "count": 50,
+      "reward": 95.00000000000006
     }
   },
-  "updated": "2026-10-06T00:35:12.211377+00:00",
-  "generation": 57
+  "updated": "2026-10-06T22:55:18.844056+00:00",
+  "generation": 60
 }
