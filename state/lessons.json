@@ -1,73 +1,73 @@
 {
-  "ts": "2026-10-13T23:14:23.427028+00:00",
-  "generation": 81,
-  "assets_seen": 162,
+  "ts": "2026-10-14T22:03:42.781678+00:00",
+  "generation": 84,
+  "assets_seen": 168,
   "best_styles": [
     [
       "shock_stat",
-      1.73,
-      4095
+      1.729,
+      4380
     ],
     [
       "countdown",
-      1.72,
-      622
+      1.719,
+      700
     ],
     [
       "secret_reveal",
-      1.707,
-      934
+      1.706,
+      979
     ]
   ],
   "weak_styles": [
     [
       "before_after",
-      1.667,
-      165
+      1.666,
+      177
     ],
     [
       "mistake_warning",
-      1.624,
-      224
+      1.631,
+      245
     ],
     [
       "myth_bust",
-      1.624,
-      44
+      1.628,
+      50
     ]
   ],
   "best_categories": [
     [
       "men's grooming",
       1.98,
-      216
+      225
     ],
     [
       "smart home accessories",
       1.9,
-      71
+      74
     ],
     [
       "beauty",
       1.834,
-      2339
+      2509
     ]
   ],
   "weak_categories": [
     [
       "grooming",
       1.74,
-      1060
+      1141
     ],
     [
       "kitchen",
       1.582,
-      1937
+      2092
     ],
     [
       "decor",
       1.58,
-      956
+      1033
     ]
   ],
   "video": {
@@ -75,8 +75,8 @@
     "avg_opportunity": 76.5
   },
   "post_only": {
-    "count": 160,
-    "avg_opportunity": 70.094
+    "count": 166,
+    "avg_opportunity": 70.072
   },
   "guidance": "lean into men's grooming, smart home accessories, beauty; favor hooks that Open with a surprising number or statistic; avoid over-using the before after angle."
 }
