@@ -1,73 +1,73 @@
 {
-  "ts": "2026-10-20T22:04:14.304180+00:00",
-  "generation": 102,
-  "assets_seen": 204,
+  "ts": "2026-10-21T22:07:07.507136+00:00",
+  "generation": 105,
+  "assets_seen": 210,
   "best_styles": [
     [
       "shock_stat",
-      1.723,
-      6397
+      1.722,
+      6781
     ],
     [
       "countdown",
-      1.715,
-      1185
+      1.714,
+      1266
     ],
     [
       "secret_reveal",
       1.705,
-      1261
+      1309
     ]
   ],
   "weak_styles": [
     [
       "question_hook",
-      1.66,
-      536
-    ],
-    [
-      "mistake_warning",
-      1.652,
-      379
+      1.659,
+      569
     ],
     [
       "myth_bust",
-      1.641,
-      86
+      1.654,
+      98
+    ],
+    [
+      "mistake_warning",
+      1.653,
+      403
     ]
   ],
   "best_categories": [
     [
       "men's grooming",
       1.98,
-      279
+      288
     ],
     [
       "smart home accessories",
       1.9,
-      92
+      95
     ],
     [
       "beauty",
       1.833,
-      3655
+      3867
     ]
   ],
   "weak_categories": [
     [
       "grooming",
       1.74,
-      1690
+      1792
     ],
     [
       "kitchen",
       1.582,
-      3148
+      3345
     ],
     [
       "decor",
       1.58,
-      1558
+      1656
     ]
   ],
   "video": {
@@ -75,8 +75,8 @@
     "avg_opportunity": 76.5
   },
   "post_only": {
-    "count": 202,
-    "avg_opportunity": 69.97
+    "count": 208,
+    "avg_opportunity": 69.957
   },
   "guidance": "lean into men's grooming, smart home accessories, beauty; favor hooks that Open with a surprising number or statistic; avoid over-using the question hook angle."
 }
