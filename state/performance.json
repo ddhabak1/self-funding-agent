@@ -3004,5 +3004,83 @@
     "manual_link": false,
     "created": "2026-10-25T21:23:48.386497+00:00",
     "logged": "2026-10-25T21:23:49.109517+00:00"
+  },
+  {
+    "id": "501d0fe6b127",
+    "product": "Vitamin C face serum",
+    "category": "beauty",
+    "style": "shock_stat",
+    "opportunity": 81.0,
+    "video": null,
+    "image": "media/vitamin-c-face-serum-shock_stat/thumbnail.jpg",
+    "buy_url": "https://www.amazon.in/s?k=vitamin+c+face+serum&tag=dipankarsstor-21",
+    "manual_link": false,
+    "created": "2026-10-26T23:01:58.038918+00:00",
+    "logged": "2026-10-26T23:01:58.510057+00:00"
+  },
+  {
+    "id": "2cc0ed82d96b",
+    "product": "Beard trimmer kit",
+    "category": "grooming",
+    "style": "shock_stat",
+    "opportunity": 72.0,
+    "video": null,
+    "image": "media/beard-trimmer-kit-shock_stat/thumbnail.jpg",
+    "buy_url": "https://www.amazon.in/s?k=beard+trimmer+for+men&tag=dipankarsstor-21",
+    "manual_link": false,
+    "created": "2026-10-26T23:01:58.540318+00:00",
+    "logged": "2026-10-26T23:01:58.829204+00:00"
+  },
+  {
+    "id": "c3c92973df84",
+    "product": "Air fryer 4L",
+    "category": "kitchen",
+    "style": "shock_stat",
+    "opportunity": 72.0,
+    "video": null,
+    "image": "media/air-fryer-4l-shock_stat/thumbnail.jpg",
+    "buy_url": "https://www.amazon.in/s?k=air+fryer+4+litre&tag=dipankarsstor-21",
+    "manual_link": false,
+    "created": "2026-10-26T23:01:58.854429+00:00",
+    "logged": "2026-10-26T23:01:59.054207+00:00"
+  },
+  {
+    "id": "1d2b75c5d64e",
+    "product": "Ceramic hair straightener",
+    "category": "beauty",
+    "style": "before_after",
+    "opportunity": 72.0,
+    "video": null,
+    "image": "media/ceramic-hair-straightener-before_after/thumbnail.jpg",
+    "buy_url": "https://www.amazon.in/s?k=hair+straightener&tag=dipankarsstor-21",
+    "manual_link": false,
+    "created": "2026-10-26T23:01:59.092675+00:00",
+    "logged": "2026-10-26T23:01:59.329329+00:00"
+  },
+  {
+    "id": "43e5f480e213",
+    "product": "LED strip lights",
+    "category": "decor",
+    "style": "secret_reveal",
+    "opportunity": 64.0,
+    "video": null,
+    "image": "media/led-strip-lights-secret_reveal/thumbnail.jpg",
+    "buy_url": "https://www.amazon.in/s?k=led+strip+lights+for+room&tag=dipankarsstor-21",
+    "manual_link": false,
+    "created": "2026-10-26T23:01:59.360012+00:00",
+    "logged": "2026-10-26T23:01:59.653262+00:00"
+  },
+  {
+    "id": "7b330fe4d9fc",
+    "product": "Non-stick cookware set",
+    "category": "kitchen",
+    "style": "shock_stat",
+    "opportunity": 56.0,
+    "video": null,
+    "image": "media/nonstick-cookware-set-shock_stat/thumbnail.jpg",
+    "buy_url": "https://www.amazon.in/s?k=non+stick+cookware+set&tag=dipankarsstor-21",
+    "manual_link": false,
+    "created": "2026-10-26T23:01:59.684152+00:00",
+    "logged": "2026-10-26T23:01:59.986862+00:00"
   }
 ]
