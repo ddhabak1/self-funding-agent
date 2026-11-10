@@ -1,73 +1,73 @@
 {
-  "ts": "2026-11-08T22:40:12.585060+00:00",
-  "generation": 159,
-  "assets_seen": 318,
+  "ts": "2026-11-10T01:53:05.749045+00:00",
+  "generation": 162,
+  "assets_seen": 324,
   "best_styles": [
     [
       "countdown",
-      1.716,
-      2943
+      1.717,
+      3103
     ],
     [
       "shock_stat",
       1.71,
-      16093
+      16675
     ],
     [
       "secret_reveal",
       1.703,
-      2272
+      2334
     ]
   ],
   "weak_styles": [
     [
       "mistake_warning",
-      1.669,
-      893
+      1.67,
+      929
     ],
     [
       "before_after",
       1.653,
-      627
+      648
     ],
     [
       "question_hook",
-      1.649,
-      1170
+      1.648,
+      1209
     ]
   ],
   "best_categories": [
     [
       "men's grooming",
       1.98,
-      450
+      459
     ],
     [
       "smart home accessories",
       1.9,
-      149
+      152
     ],
     [
       "beauty",
       1.832,
-      8709
+      9035
     ]
   ],
   "weak_categories": [
     [
       "grooming",
       1.74,
-      4141
+      4300
     ],
     [
       "kitchen",
       1.581,
-      7917
+      8228
     ],
     [
       "decor",
       1.58,
-      3933
+      4088
     ]
   ],
   "video": {
@@ -75,8 +75,8 @@
     "avg_opportunity": 76.5
   },
   "post_only": {
-    "count": 316,
-    "avg_opportunity": 69.801
+    "count": 322,
+    "avg_opportunity": 69.795
   },
   "guidance": "lean into men's grooming, smart home accessories, beauty; favor hooks that Frame it as a fast top-3 countdown of picks; avoid over-using the mistake warning angle."
 }
