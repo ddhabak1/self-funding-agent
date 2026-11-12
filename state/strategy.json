@@ -1,68 +1,68 @@
 {
   "styles": {
     "shock_stat": {
-      "count": 17257,
-      "reward": 29496.900000002785
+      "count": 17841,
+      "reward": 30488.760000003058
     },
     "mistake_warning": {
-      "count": 965,
-      "reward": 1611.979999999998
+      "count": 1001,
+      "reward": 1672.7599999999973
     },
     "before_after": {
-      "count": 672,
-      "reward": 1111.1599999999996
+      "count": 696,
+      "reward": 1151.0600000000002
     },
     "myth_bust": {
-      "count": 466,
-      "reward": 788.580000000001
+      "count": 493,
+      "reward": 833.2200000000009
     },
     "countdown": {
-      "count": 3277,
-      "reward": 5626.699999999803
+      "count": 3464,
+      "reward": 5948.179999999787
     },
     "question_hook": {
-      "count": 1248,
-      "reward": 2056.540000000008
+      "count": 1287,
+      "reward": 2120.140000000005
     },
     "secret_reveal": {
-      "count": 2397,
-      "reward": 4081.759999999916
+      "count": 2460,
+      "reward": 4188.259999999911
     },
     "price_shock": {
-      "count": 1271,
-      "reward": 2155.0000000000055
+      "count": 1316,
+      "reward": 2231.5600000000013
     }
   },
   "categories": {
     "beauty": {
-      "count": 9367,
-      "reward": 17161.139999999436
+      "count": 9705,
+      "reward": 17780.039999999404
     },
     "grooming": {
-      "count": 4462,
-      "reward": 7763.879999999293
+      "count": 4627,
+      "reward": 8050.979999999257
     },
     "kitchen": {
-      "count": 8545,
-      "reward": 13509.57999999949
+      "count": 8868,
+      "reward": 14020.079999999467
     },
     "decor": {
-      "count": 4246,
-      "reward": 6708.67999999975
+      "count": 4407,
+      "reward": 6963.0599999997385
     },
     "men's grooming": {
-      "count": 468,
-      "reward": 926.6399999999975
+      "count": 477,
+      "reward": 944.4599999999973
     },
     "kitchen & cookware": {
-      "count": 310,
-      "reward": 564.1999999999994
+      "count": 316,
+      "reward": 575.1199999999993
     },
     "smart home accessories": {
-      "count": 155,
-      "reward": 294.50000000000006
+      "count": 158,
+      "reward": 300.2
     }
   },
-  "updated": "2026-11-10T23:54:11.485318+00:00",
-  "generation": 165
+  "updated": "2026-11-12T01:16:42.790565+00:00",
+  "generation": 168
 }
