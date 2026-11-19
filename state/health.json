@@ -1,5 +1,5 @@
 {
-  "ts": "2026-11-19T11:23:41.139902+00:00",
+  "ts": "2026-11-19T20:21:33.594083+00:00",
   "healthy": true,
   "checks": {
     "llm": {
@@ -14,7 +14,7 @@
       "circuit_open": false
     },
     "disk": {
-      "free_gb": 84.16,
+      "free_gb": 84.28,
       "ok": true
     },
     "site": {
