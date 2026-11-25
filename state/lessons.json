@@ -1,73 +1,73 @@
 {
-  "ts": "2026-11-24T04:12:44.366071+00:00",
-  "generation": 204,
-  "assets_seen": 408,
+  "ts": "2026-11-25T02:56:25.032421+00:00",
+  "generation": 207,
+  "assets_seen": 414,
   "best_styles": [
     [
       "countdown",
-      1.714,
-      6943
+      1.713,
+      7331
     ],
     [
       "shock_stat",
       1.706,
-      24886
+      25477
     ],
     [
       "secret_reveal",
       1.7,
-      3216
+      3282
     ]
   ],
   "weak_styles": [
     [
       "myth_bust",
-      1.676,
-      817
+      1.675,
+      844
     ],
     [
       "before_after",
-      1.657,
-      996
+      1.658,
+      1023
     ],
     [
       "question_hook",
       1.642,
-      1842
+      1893
     ]
   ],
   "best_categories": [
     [
       "men's grooming",
       1.98,
-      585
+      594
     ],
     [
       "smart home accessories",
       1.9,
-      194
+      197
     ],
     [
       "beauty",
       1.832,
-      14229
+      14645
     ]
   ],
   "weak_categories": [
     [
       "grooming",
       1.74,
-      6841
+      7045
     ],
     [
       "kitchen",
       1.581,
-      13212
+      13613
     ],
     [
       "decor",
       1.58,
-      6573
+      6773
     ]
   ],
   "video": {
@@ -75,8 +75,8 @@
     "avg_opportunity": 76.5
   },
   "post_only": {
-    "count": 406,
-    "avg_opportunity": 69.734
+    "count": 412,
+    "avg_opportunity": 69.731
   },
   "guidance": "lean into men's grooming, smart home accessories, beauty; favor hooks that Frame it as a fast top-3 countdown of picks; avoid over-using the myth bust angle."
 }
